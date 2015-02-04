@@ -13,7 +13,7 @@ output:
 Which symbol can be used to slicing and extracting data from a vector?
 
 * `[ ]`
-* `[[ ]]`
+* `[[c( ) ]]`
 * `$`
 * `[, c( )]`
 
@@ -30,7 +30,9 @@ is.na(y)
 * integer
 * character
 
+## Lecture 2a
 
+## Lecture 2b
 
 
 
