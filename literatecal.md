@@ -1,14 +1,6 @@
----
-title: "Literate Calculation"
-author: "Xiangyi Xu (Lydia)"
-date: "Monday, February 02, 2015"
-output:
-  html_document:
-    keep_md: yes
-  pdf_document:
-    keep_tex: yes
-  word_document: default
----
+# Literate Calculation
+Xiangyi Xu (Lydia)  
+Monday, February 02, 2015  
 
 Summary
 ---------
@@ -33,7 +25,8 @@ A = \pi r^2
 $$
 The diameter of each size pizza is:
 
-```{r pizza_sizes}
+
+```r
 d_small   <- 10
 d_medium  <- 12
 d_large   <- 14
@@ -42,50 +35,57 @@ d_exlarge <- 16
 
 The price of each size pizza is:
 
-```{r pizza_prices}
+
+```r
 p_small   <- 17.95
 p_medium  <- 21.95
 p_large   <- 24.95
 p_exlarge <- 28.95
 ```
 
-For the small pizza, d=`r d_small` inches:
+For the small pizza, d=10 inches:
 
-```{r pizza_area_small}
+
+```r
 Area <- function(diameter){
   pi * (diameter/2)^2
 }
 ```
 
-This gives us an area of `r round(Area(d_small), 2)` square inches.
+This gives us an area of 78.54 square inches.
 
-```{r calculate_area}
+
+```r
 A_small <- Area(d_small)
 ```
 
 Therefore, the cost per square inch for small size of pizza is
-$`r round((p_small/A_small), 2)`
+$0.23
 
-```{r calculate_price}
+
+```r
 V_small <- p_small/A_small
 ```
 
 And the medium pizza is:
-$`r round((p_medium/Area(d_medium)), 2)`
+$0.19
 The large pizza is:
-$`r round((p_large/Area(d_large)), 2)`
+$0.16
 The extra large pizza is:
-$`r round((p_exlarge/Area(d_exlarge)), 2)`
+$0.14
 
 As we can see from the graph that, the bigger size the pizza, the cheaper the price is. 
 
-``` {r pizza_plot}
+
+```r
 pizza_diameter <- c(small=10, medium=12, large=14, exlarge=16)
 pizza_price <- c(small=17.95, medium=21.95, large=24.95, exlarge=28.95)
 pizza_area <- Area(pizza_diameter)
 price_per_sq_inch <- pizza_price/pizza_area
 plot(pizza_diameter, price_per_sq_inch, type="b")
 ```
+
+![](literatecal_files/figure-html/pizza_plot-1.png) 
 
 Conclusion
 ------------
