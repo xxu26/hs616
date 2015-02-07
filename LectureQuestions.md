@@ -8,7 +8,7 @@ output:
 ---
 
 
-## Lecture 1a
+### Lecture 1a
 
 Which symbol can be used to slicing and extracting data from a vector?
 
@@ -17,7 +17,7 @@ Which symbol can be used to slicing and extracting data from a vector?
 * `$`
 * `[, c( )]`
 
-## Lecture 1b
+### Lecture 1b
 
 In the following codes, what is the type of the variable returned?
 ```
@@ -30,7 +30,7 @@ is.na(y)
 * integer
 * character
 
-## Lecture 2a
+### Lecture 2a
 
 In the following codes, when a and b equal to what values, will the plot show a quarter of a circle?
 ```r
@@ -46,7 +46,23 @@ plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 * a=-3.0, b=3.0
 
 
-## Lecture 2b
+### Lecture 2b
 
+What does the following function return?
 
-
+```r
+f <- function(x) {
+  f <- function(x) {
+    f <- function(x) {
+      x ^ 2
+    }
+    f(x) + 1
+  }
+  f(x) * 2
+}
+f(10)
+```
+* 202
+* 441
+* 40
+* 200
