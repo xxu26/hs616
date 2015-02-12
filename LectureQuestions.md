@@ -12,10 +12,10 @@ output:
 
 Which symbol can be used to slicing and extracting data from a vector?
 
-a. `[ ]`
-b. `[[c( ) ]]`
-c. `$`
-d. `[, c( )]`
+1. `[ ]`
+2. `[[c( ) ]]`
+3. `$`
+4. `[, c( )]`
 
 ### Lecture 1b
 
@@ -25,10 +25,10 @@ y <- c(5, 6, 7, 8, NA)
 is.na(y)
 ```
 
-a. logical
-b. numeric
-c. integer
-d. character
+1. logical
+2. numeric
+3. integer
+4. character
 
 ### Lecture 2a
 
@@ -40,10 +40,10 @@ y <- runif(N, min=m, max=n)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 ```
 
-a. m=0,    n=0
-b. m=-1.0, n=1.0
-c. m=-2.0, n=2.0
-d. m=-3.0, n=3.0
+1. m=0,    n=0
+2. m=-1.0, n=1.0
+3. m=-2.0, n=2.0
+4. m=-3.0, n=3.0
 
 
 ### Lecture 2b
@@ -62,10 +62,10 @@ f <- function(x) {
 }
 f(10)
 ```
-a. 202
-b. 441
-c. 40
-d. 200
+1. 202
+2. 441
+3. 40
+4. 200
 
 
 ### Lecture 3a
@@ -76,10 +76,10 @@ What is the name of the following distribution?
 x <- seq(0,1,length=200)
 plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
 ```
-a. Uniform distribution
-b. Normal distribution
-c. Poisson distribution
-d. Binominal distribution
+1. Uniform distribution
+2. Normal distribution
+3. Poisson distribution
+4. Binominal distribution
 
 
 ### Lecture 3b
@@ -89,7 +89,7 @@ persp() can be used to produce a three-dimentional plot. What is the function of
 ```r
   persp(x, y, fa, theta=30, phi=20)
 ```
-a. Control the angles at which the plot is viewed. 
-b. Control the width and height of the plot
-c. Control the size and dimension of the plot
-d. Control the length and width of the plot
+1. Control the angles at which the plot is viewed. 
+2. Control the width and height of the plot
+3. Control the size and dimension of the plot
+4. Control the length and width of the plot
