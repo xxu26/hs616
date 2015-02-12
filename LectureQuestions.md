@@ -12,10 +12,10 @@ output:
 
 Which symbol can be used to slicing and extracting data from a vector?
 
-* `[ ]`
-* `[[c( ) ]]`
-* `$`
-* `[, c( )]`
+a. `[ ]`
+b. `[[c( ) ]]`
+c. `$`
+d. `[, c( )]`
 
 ### Lecture 1b
 
@@ -25,25 +25,25 @@ y <- c(5, 6, 7, 8, NA)
 is.na(y)
 ```
 
-* logical
-* numeric
-* integer
-* character
+a. logical
+b. numeric
+c. integer
+d. character
 
 ### Lecture 2a
 
-In the following codes, when a and b equal to what values, will the plot show a quarter of a circle?
+In the following codes, when m and n equal to what values, will the plot show a quarter of a circle?
 ```r
 N <- 10000
-x <- runif(N, min=a, max=b)
-y <- runif(N, min=a, max=b)
+x <- runif(N, min=m, max=n)
+y <- runif(N, min=m, max=n)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 ```
 
-* a=0,    b=0
-* a=-1.0, b=1.0
-* a=-2.0, b=2.0
-* a=-3.0, b=3.0
+a. m=0,    n=0
+b. m=-1.0, n=1.0
+c. m=-2.0, n=2.0
+d. m=-3.0, n=3.0
 
 
 ### Lecture 2b
@@ -62,7 +62,34 @@ f <- function(x) {
 }
 f(10)
 ```
-* 202
-* 441
-* 40
-* 200
+a. 202
+b. 441
+c. 40
+d. 200
+
+
+### Lecture 3a
+
+What is the name of the following distribution? 
+
+```{r uniform_distribution, echo=FALSE}
+x <- seq(0,1,length=200)
+plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
+```
+a. Uniform distribution
+b. Normal distribution
+c. Poisson distribution
+d. Binominal distribution
+
+
+### Lecture 3b
+
+persp() can be used to produce a three-dimentional plot. What is the function of its arguments theta and phi?
+
+```r
+  persp(x, y, fa, theta=30, phi=20)
+```
+a. Control the angles at which the plot is viewed. 
+b. Control the width and height of the plot
+c. Control the size and dimension of the plot
+d. Control the length and width of the plot
