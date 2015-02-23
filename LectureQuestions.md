@@ -115,3 +115,19 @@ f(3)
 2. 7 			
 3. 16 	
 4. 4
+
+
+### Lecture 4b
+
+The following code will produce a warning in R. Please explain why?
+
+```r
+x <- 1:10
+if(x > 5) {
+        x <- 0
+}
+```
+1. 'x' is a vector of length 10 and 'if' can only test a single logical statement. 	 
+2. You cannot set 'x' to be 0 because 'x' is a vector and 0 is a scalar. 			
+3. There are no elements in 'x' that are greater than 5 			
+4. The expression uses curly braces. 
