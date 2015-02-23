@@ -93,3 +93,25 @@ persp() can be used to produce a three-dimentional plot. What is the function of
 2. Control the width and height of the plot
 3. Control the size and dimension of the plot
 4. Control the length and width of the plot
+
+
+### Lecture 4a
+
+Consider the following function, what value will be returned?
+
+```{r function environment}
+f <- function(x){
+        g <- function(y){
+                y+z
+        }
+        z<- 4
+        x + g(x)
+}
+
+z<-10
+f(3)
+```
+1. 10 			
+2. 7 			
+3. 16 	
+4. 10 
