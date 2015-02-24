@@ -7,32 +7,33 @@ output:
     keep_md: yes
 ---
 
-
-### Lecture 1a
+## Lecture 1a
 
 Which symbol can be used to slicing and extracting data from a vector?
 
-1. `[ ]`
-2. `[[c( ) ]]`
-3. `$`
-4. `[, c( )]`
+* `[ ]`
+* `[[c( ) ]]`
+* `$`
+* `[, c( )]`
 
-### Lecture 1b
+## Lecture 1b
 
 In the following codes, what is the type of the variable returned?
+
 ```
 y <- c(5, 6, 7, 8, NA)
 is.na(y)
 ```
 
-1. logical
-2. numeric
-3. integer
-4. character
+* logical
+* numeric
+* integer
+* character
 
-### Lecture 2a
+## Lecture 2a
 
 In the following codes, when m and n equal to what values, will the plot show a quarter of a circle?
+
 ```r
 N <- 10000
 x <- runif(N, min=m, max=n)
@@ -40,13 +41,12 @@ y <- runif(N, min=m, max=n)
 plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 ```
 
-1. m=0,    n=0
-2. m=-1.0, n=1.0
-3. m=-2.0, n=2.0
-4. m=-3.0, n=3.0
+* m=0,    n=0
+* m=-1.0, n=1.0
+* m=-2.0, n=2.0
+* m=-3.0, n=3.0
 
-
-### Lecture 2b
+## Lecture 2b
 
 What does the following function return?
 
@@ -62,13 +62,13 @@ f <- function(x) {
 }
 f(10)
 ```
-1. 202
-2. 441
-3. 40
-4. 200
 
+* 202
+* 441
+* 40
+* 200
 
-### Lecture 3a
+## Lecture 3a
 
 What is the name of the following distribution? 
 
@@ -76,26 +76,26 @@ What is the name of the following distribution?
 x <- seq(0,1,length=200)
 plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
 ```
-1. Uniform distribution
-2. Normal distribution
-3. Poisson distribution
-4. Binominal distribution
 
+* Uniform distribution
+* Normal distribution
+* Poisson distribution
+* Binominal distribution
 
-### Lecture 3b
+## Lecture 3b
 
 persp() can be used to produce a three-dimentional plot. What is the function of its arguments theta and phi?
 
 ```r
   persp(x, y, fa, theta=30, phi=20)
 ```
-1. Control the angles at which the plot is viewed. 
-2. Control the width and height of the plot
-3. Control the size and dimension of the plot
-4. Control the length and width of the plot
 
+* Control the angles at which the plot is viewed. 
+* Control the width and height of the plot
+* Control the size and dimension of the plot
+* Control the length and width of the plot
 
-### Lecture 4a
+## Lecture 4a
 
 Consider the following function, what value will be returned?
 
@@ -111,13 +111,13 @@ f <- function(x){
 z<-10
 f(3)
 ```
-1. 10 			
-2. 7 			
-3. 16 	
-4. 4
 
+* 10 			
+* 7 			
+* 16 	
+* 4
 
-### Lecture 4b
+## Lecture 4b
 
 The following code will produce a warning in R. Please explain why?
 
@@ -127,7 +127,8 @@ if(x > 5) {
         x <- 0
 }
 ```
-1. 'x' is a vector of length 10 and 'if' can only test a single logical statement. 	 
-2. You cannot set 'x' to be 0 because 'x' is a vector and 0 is a scalar. 			
-3. There are no elements in 'x' that are greater than 5 			
-4. The expression uses curly braces. 
+
+* 'x' is a vector of length 10 and 'if' can only test a single logical statement. 	 
+* You cannot set 'x' to be 0 because 'x' is a vector and 0 is a scalar. 			
+* There are no elements in 'x' that are greater than 5 			
+* The expression uses curly braces. 
