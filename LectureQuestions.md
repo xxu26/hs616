@@ -19,7 +19,6 @@ Which symbol can be used to slicing and extracting data from a vector?
 ## Lecture 1b
 
 In the following codes, what is the type of the variable returned?
-
 ```
 y <- c(5, 6, 7, 8, NA)
 is.na(y)
@@ -33,7 +32,6 @@ is.na(y)
 ## Lecture 2a
 
 In the following codes, when m and n equal to what values, will the plot show a quarter of a circle?
-
 ```r
 N <- 10000
 x <- runif(N, min=m, max=n)
@@ -49,7 +47,6 @@ plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 ## Lecture 2b
 
 What does the following function return?
-
 ```r
 f <- function(x) {
   f <- function(x) {
@@ -71,7 +68,6 @@ f(10)
 ## Lecture 3a
 
 What is the name of the following distribution? 
-
 ```{r uniform_distribution, echo=FALSE}
 x <- seq(0,1,length=200)
 plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
@@ -85,7 +81,6 @@ plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
 ## Lecture 3b
 
 persp() can be used to produce a three-dimentional plot. What is the function of its arguments theta and phi?
-
 ```r
   persp(x, y, fa, theta=30, phi=20)
 ```
@@ -98,7 +93,6 @@ persp() can be used to produce a three-dimentional plot. What is the function of
 ## Lecture 4a
 
 Consider the following function, what value will be returned?
-
 ```{r function environment}
 f <- function(x){
         g <- function(y){
@@ -120,7 +114,6 @@ f(3)
 ## Lecture 4b
 
 The following code will produce a warning in R. Please explain why?
-
 ```r
 x <- 1:10
 if(x > 5) {
