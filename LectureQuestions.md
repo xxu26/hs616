@@ -122,6 +122,19 @@ if(x > 5) {
 ```
 
 * 'x' is a vector of length 10 and 'if' can only test a single logical statement. 	 
-* You cannot set 'x' to be 0 because 'x' is a vector and 0 is a scalar. 			
+* use 'x' is a vector and 0 is a scalar. 			
 * There are no elements in 'x' that are greater than 5 			
 * The expression uses curly braces. 
+
+## Lecture 5a
+
+Which of the following commands is equivalent to with(x, f(z))?
+
+* x$f(x$z)
+* f(x$z)
+* x$f(z)
+* f(z)
+* It depends.
+
+## Lecture 5b
+
