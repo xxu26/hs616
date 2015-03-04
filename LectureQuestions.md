@@ -128,9 +128,8 @@ if(x > 5) {
 
 ## Lecture 5a
 
-Which of the following commands is equivalent to with(x, f(z))?
+x is a data frame and z is a feature of x. Which of the following commands is equivalent to with(x, f(z))?
 
-* x$f(x$z)
 * f(x$z)
 * x$f(z)
 * f(z)
@@ -138,3 +137,9 @@ Which of the following commands is equivalent to with(x, f(z))?
 
 ## Lecture 5b
 
+Simulated coin-tossing can be done using different methods. Which of the following will NOT work?
+
+* coin <- sample(c("H", "T"), 10, replace = F)
+* rbinom(10, 1, .5)
+* ifelse(rbinom(10, 1, .5) == 1, "H", "T")
+* c("H", "T") [1 +rbinom(10, 1, .5)]
