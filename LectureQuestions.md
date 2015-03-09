@@ -143,3 +143,13 @@ Simulated coin-tossing can be done using different methods. Which of the followi
 * rbinom(10, 1, .5)
 * ifelse(rbinom(10, 1, .5) == 1, "H", "T")
 * c("H", "T") [1 +rbinom(10, 1, .5)]
+
+## Lecture 6a
+
+A vector x <- 1:10, which of the following choice will NOT insert 1.23 between x[7] and x[8]?
+
+* z <- rbind(x, 1.23, after = 7)
+* z <- append(x, 1.23, after = 7)
+* z <- c(x[1:7], 1.23, x[8:10]) 
+* v <- 1.23; k <- 7; i <- seq(along = x); z <- c(x[i <= k], v, x[i > k])
+  
