@@ -9,7 +9,7 @@ output:
 
 ## Lecture 1a
 
-Which symbol can be used to slicing and extracting data from a vector?
+Which symbol can be used to slicing and extracting data from a vector in R?
 
 * `[ ]`
 * `[[c( ) ]]`
@@ -153,3 +153,33 @@ A vector x <- 1:10, which of the following choice will NOT insert 1.23 between x
 * z <- c(x[1:7], 1.23, x[8:10]) 
 * v <- 1.23; k <- 7; i <- seq(along = x); z <- c(x[i <= k], v, x[i > k])
   
+## Lecture 6b
+
+What is the name of the following distribution? 
+```{r snippet code}
+set.seed(1)
+rpois(5, 2)
+```
+
+* A vector with the numbers 2, 2, 3, 5, 2
+* A vector with the numbers 3.3, 2.5, 0.5, 1.1, 1.7
+* It is impossible to tell because the result is random
+* A vector with the numbers 1, 4, 1, 1, 5
+
+## Lecture 7a
+
+What R function can be used to generate standard Normal random variables?
+
+* rnorm
+* pnorm
+* dnorm
+* qnorm
+
+## Lecture 7b
+
+When simulating data, why is using the set.seed() function important?
+
+* It can be used to specify which random number generating algorithm R should use, ensuring consistency and reproducibility.
+* It can be used to generate non-uniform random numbers.
+* It ensures that the random numbers generated are within specified boundaries.
+* It ensures that the sequence of random numbers is truly random.
