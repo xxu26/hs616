@@ -195,3 +195,12 @@ The principal() function will perform a principal componets analysis in R, start
 * nfactors specifies the number of principal components to extract (1 by default)
 * rotate indicates the rotation to be applied (varimax by default)
 * scores specifies whether or not to calculate principal component scores (false by default)
+
+## Lecture 8b
+
+Which criteria is correct for deciding how many components to retain in a PCA? 
+
+* All of these choices.
+* Basing the number of components on prior experience and theory. 
+* Selecting the number of components needed to account for some threshold cumulative amount of variance in the variables.
+* Selecting the number of components to retain by examing the eigenvalues of the k*k correlation matrix among the variables.
