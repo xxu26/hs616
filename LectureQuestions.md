@@ -183,3 +183,15 @@ When simulating data, why is using the set.seed() function important?
 * It can be used to generate non-uniform random numbers.
 * It ensures that the random numbers generated are within specified boundaries.
 * It ensures that the sequence of random numbers is truly random.
+
+## Lecture 8a
+
+The principal() function will perform a principal componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters?
+```r
+  principal(r, nfactors=, rotate=, scores=)
+```
+
+* r is a covariance matrix or a raw data matrix 
+* nfactors specifies the number of principal components to extract (1 by default)
+* rotate indicates the rotation to be applied (varimax by default)
+* scores specifies whether or not to calculate principal component scores (false by default)
