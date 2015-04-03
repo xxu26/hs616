@@ -204,3 +204,27 @@ Which criteria is correct for deciding how many components to retain in a PCA?
 * Basing the number of components on prior experience and theory. 
 * Selecting the number of components needed to account for some threshold cumulative amount of variance in the variables.
 * Selecting the number of components to retain by examing the eigenvalues of the k*k correlation matrix among the variables.
+
+## Lecture 9a
+
+Assume that `library(ggplot2)`has been loaded and mtcars is its built-in database. Which of the following code will NOT achieve the purpose as the other three?  
+
+* plot(wt~mpg, data=mtcars) 
+* plot(mtcars$wt, mtcars$mpg)
+* qplot(mtcars$wt, mtcars$mpg)
+* ggplot(mtcars, aex(x=wt, y=mpg)) + geom_point()
+
+## Lecture 9b
+
+Assume that `library(ggplot2)` has been loaded and database pressure is built-in. Which of the following 2 codes are equivalent?
+```{r graphs}
+1. qplot(temperature, pressure, geom="lines")
+2. ggplot(presure, aes(x=temperature, y=pressure)) + geom_line()
+3. qplot(temperature, pressure, data=pressure, geom=c("line", "point"))
+4. ggplot(pressure, aex(x=temperature, y=pressure)) + geom_line() + geom_point()
+```
+
+* 1 and 2
+* 1 and 3
+* 2 and 2
+* 2 and 4
