@@ -228,3 +228,16 @@ Assume that `library(ggplot2)` has been loaded and database pressure is built-in
 * 1 and 3
 * 2 and 2
 * 2 and 4
+
+## Lecture 10a
+
+The following codes are supposed to implement a version of Newton's method for calculating the square root of y. Which one is NOT correct? 
+```{r flow control}
+y <- 12345
+x <- y/2
+```
+
+* while (abs(x*x-y) <1e-10) x <- (x + y/x)/2
+* while (abs(x*x-y) >1e-10) x <- (x + y/x)/2
+* repeat {x <- (x+y/x)/2; if (abs(x*x-y) < 1e-10) break}
+* repeat {x <- (x+y/x)/2; if (all(abs(x*x - y) < 1e-10)) break}
