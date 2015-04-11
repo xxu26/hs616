@@ -241,3 +241,13 @@ x <- y/2
 * while (abs(x*x-y) >1e-10) x <- (x + y/x)/2
 * repeat {x <- (x+y/x)/2; if (abs(x*x-y) < 1e-10) break}
 * repeat {x <- (x+y/x)/2; if (all(abs(x*x - y) < 1e-10)) break}
+
+## Lecture 10b
+
+Which of the following statement is FALSE?
+
+* Shiny is a Python package that makes it easy to build interactive web applications (apps) straight from R.
+* Shiny apps have two components:a user-interface script and a server script.
+* The user-interface script controls the layout and appearance of your app. It is defined in a source script (ui.R).
+* The server.R script contains the instructions that your computer needs to build your app. 
+
