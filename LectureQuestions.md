@@ -251,3 +251,11 @@ Which of the following statement is FALSE?
 * The user-interface script controls the layout and appearance of your app. It is defined in a source script (ui.R).
 * The server.R script contains the instructions that your computer needs to build your app. 
 
+## Lecture 11a
+
+To standardize each variable in a dataset for analysis, we may use scale() function. The function equals to which code snippet of the following?
+
+* df1 <- apply(mydata, 2, function(x) {(x-mean(x))/sd(x)})
+* df2 <- apply(mydata, 2, function(x) {x/max(x)})
+* df3 <- apply(mydata, 2, function(x) {(x+mean(x))/sd(x)})
+* df4 <- apply(mydata, 2, function(x) {(x-mean(x))/mad(x)})
