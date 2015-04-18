@@ -259,3 +259,12 @@ To standardize each variable in a dataset for analysis, we may use scale() funct
 * df2 <- apply(mydata, 2, function(x) {x/max(x)})
 * df3 <- apply(mydata, 2, function(x) {(x+mean(x))/sd(x)})
 * df4 <- apply(mydata, 2, function(x) {(x-mean(x))/mad(x)})
+
+## Lecture 11b
+
+In the partitioning approach, the most common method is the K-means cluster analysis. Which of the following statement is correct?
+
+* All of the statements. 
+* Select k centroids; assign each data point to its closet centroid.
+* Recalculate the centroids as the average of all data in a cluster; assign data points to their closet centroids.
+* Continue the other steps until the obeservations are not reassigned or the maximum number of iterations is reached.
