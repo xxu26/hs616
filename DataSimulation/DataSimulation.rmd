@@ -1,0 +1,22 @@
+---
+title: "Data Simulation"
+author: "Xiangyi Xu"
+date: "Thursday, April 09, 2015"
+output:
+  html_document:
+    keep_md: yes
+---
+
+
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+
