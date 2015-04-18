@@ -6,6 +6,40 @@ output:
   html_document:
     keep_md: yes
 ---
+generate_dataset <- function(N=100){
+        age <- runif(N, min=72-10, max=72+10)
+        
+        obesiety <- sample(c("Y", "N"), N, replace=TRUE, prob=c(.36, .64))
+        
+        sex <- sample(c("M", "F"), N, replace=TRUE, prob=c(.46, .54))
+        
+        marital_status <- sample(c("Yes", "No"), N, replace=TRUE, prob=c(.70, 
+                                    .30))
+        diabetes <- sample(c("Y", "N"), replace=TRUE, prob=)
+        
+        smoking <- sample(c("Never", "Past", "Current"), replace=TRUE, 
+                             prob=c(.55, .27, .18))
+                             
+        diet <- function(){
+        
+        vitaminC <-                      
+        cataract <- function(){
+             
+        
+        }
+
+# add some noise
+
+        zodiac <- c("Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                      "Libra","Scorpio", "Sagittarius", "Capricorn","Aquarius", 
+                        "Pisces") 
+        sign <- sample(zodiac, N, replace=TRUE)
+        
+        
+        
+        data.frame(sex, age, obesity, diabetes, smoking, diet, sign, cataract)
+}
+
 
 
 
