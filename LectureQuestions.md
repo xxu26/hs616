@@ -226,7 +226,7 @@ Assume that `library(ggplot2)` has been loaded and database pressure is built-in
 
 * 1 and 2
 * 1 and 3
-* 2 and 2
+* 2 and 3
 * 2 and 4
 
 ## Lecture 10a
@@ -272,7 +272,6 @@ In the partitioning approach, the most common method is the K-means cluster anal
 ## Lecture 12a
 
 Suppose we define the following function in R. What is the result of running `cube(3)` in R after defining the function?
-
 ```r
 cube <- function(x, n){
     x^3
