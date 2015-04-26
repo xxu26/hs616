@@ -268,3 +268,27 @@ In the partitioning approach, the most common method is the K-means cluster anal
 * Select k centroids; assign each data point to its closet centroid.
 * Recalculate the centroids as the average of all data in a cluster; assign data points to their closet centroids.
 * Continue the other steps until the obeservations are not reassigned or the maximum number of iterations is reached.
+
+## Lecture 12a
+
+Suppose we define the following function in R. What is the result of running `cube(3)` in R after defining the function?
+
+```r
+cube <- function(x, n){
+    x^3
+}
+```
+
+* The number 27 is returned
+* The users is prompted to specify the value of 'n'. 
+* An error is returned because 'n' is not specified in the call to 'cube' 
+* A warning is given with no value returned. 
+
+## Lecture 13a
+
+What is an environment in R?
+
+* A collection of symbol/object pairs 
+* A list whose elements are all functions 
+* A special type of function 
+* An R package that only contains data 
