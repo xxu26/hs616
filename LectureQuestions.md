@@ -284,7 +284,7 @@ cube <- function(x, n){
 * An error is returned because 'n' is not specified in the call to 'cube' 
 * A warning is given with no value returned. 
 
-## Lecture 13a
+## Lecture 12b
 
 What is an environment in R?
 
