@@ -32,7 +32,7 @@ is.na(y)
 ## Lecture 2a
 
 In the following codes, when m and n equal to what values, will the plot show a quarter of a circle?
-```r
+```{r}
 N <- 10000
 x <- runif(N, min=m, max=n)
 y <- runif(N, min=m, max=n)
@@ -47,7 +47,7 @@ plot(x, y, pch=16, col=ifelse(x^2 + y^2<1, "red", "blue"))
 ## Lecture 2b
 
 What does the following function return?
-```r
+```{r}
 f <- function(x) {
   f <- function(x) {
     f <- function(x) {
@@ -81,7 +81,7 @@ plot(c(-0.1, 0, x, 1, 1.1), c(0,0,dunif(x),0,0), type='l', ylab="P")
 ## Lecture 3b
 
 persp() can be used to produce a three-dimentional plot. What is the function of its arguments theta and phi?
-```r
+```{r}
   persp(x, y, fa, theta=30, phi=20)
 ```
 
@@ -114,7 +114,7 @@ f(3)
 ## Lecture 4b
 
 The following code will produce a warning in R. Please explain why?
-```r
+```{r}
 x <- 1:10
 if(x > 5) {
         x <- 0
@@ -187,7 +187,7 @@ When simulating data, why is using the set.seed() function important?
 ## Lecture 8a
 
 The principal() function will perform a principal componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters?
-```r
+```{r}
   principal(r, nfactors=, rotate=, scores=)
 ```
 
@@ -272,7 +272,7 @@ In the partitioning approach, the most common method is the K-means cluster anal
 ## Lecture 12a
 
 Suppose we define the following function in R. What is the result of running `cube(3)` in R after defining the function?
-```r
+```{r}
 cube <- function(x, n){
     x^3
 }
