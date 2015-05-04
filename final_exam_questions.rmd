@@ -24,11 +24,13 @@ Which criteria is correct for deciding how many components to retain in a PCA?
 * All of these choices.
 * Basing the number of components on prior experience and theory. 
 * Selecting the number of components needed to account for some threshold cumulative amount of variance in the variables.
-* Selecting the number of components to retain by examing the eigenvalues of the k*k correlation matrix among the variables.
+* Selecting the number of components to retain by examing the eigenvalues of 
+the k*k correlation matrix among the variables.
 
 ## Lecture 9a
 
-Assume that `library(ggplot2)`has been loaded and mtcars is its built-in database. Which of the following code will NOT achieve the purpose as the other three?  
+Assume that `library(ggplot2)`has been loaded and mtcars is its built-in 
+database. Which of the following code will NOT achieve the purpose as the other three?  
 
 * plot(wt~mpg, data=mtcars) 
 * plot(mtcars$wt, mtcars$mpg)
@@ -69,10 +71,13 @@ x <- y/2
 
 Which of the following statement is FALSE?
 
-* Shiny is a Python package that makes it easy to build interactive web applications (apps) straight from R.
+* Shiny is a Python package that makes it easy to build interactive web 
+applications (apps) straight from R.
 * Shiny apps have two components:a user-interface script and a server script.
-* The user-interface script controls the layout and appearance of your app. It is defined in a source script (ui.R).
-* The server.R script contains the instructions that your computer needs to build your app. 
+* The user-interface script controls the layout and appearance of your app. 
+It is defined in a source script (ui.R).
+* The server.R script contains the instructions that your computer needs to 
+build your app. 
 
 ## Lecture 11a
 
@@ -89,12 +94,14 @@ In the partitioning approach, the most common method is the K-means cluster anal
 
 * All of the statements. 
 * Select k centroids; assign each data point to its closet centroid.
-* Recalculate the centroids as the average of all data in a cluster; assign data points to their closet centroids.
+* Recalculate the centroids as the average of all data in a cluster; 
+assign data points to their closet centroids.
 * Continue the other steps until the obeservations are not reassigned or the maximum number of iterations is reached.
 
 ## Lecture 12a
 
-Suppose we define the following function in R. What is the result of running `cube(3)` in R after defining the function?
+Suppose we define the following function in R. What is the result of 
+running `cube(3)` in R after defining the function?
 ```{r}
 cube <- function(x, n){
     x^3
@@ -114,3 +121,23 @@ What is an environment in R?
 * A list whose elements are all functions 
 * A special type of function 
 * An R package that only contains data 
+
+## Lecture 13a
+
+Will the following two variables f1 and f2 generate the same results?
+```{r define function in two ways}
+f1 <- function(x1, x2) 
+        return (-5-3*x1+4*x2+x1^2-x1*x2+x2^2)
+
+f1(0, 0)
+f1(1, 2)
+
+f2 <- function(x)
+        return (-5-3*x[1]+4*x[2]+x[1]^2-x[1]*x[2]+x[2]^2)
+
+f2(c(0, 2))
+f2(c(1, 2))
+```
+
+*Yes
+*No
