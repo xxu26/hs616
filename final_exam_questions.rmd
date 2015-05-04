@@ -10,7 +10,8 @@ output:
 
 ## Lecture 8a
 
-The principal() function will perform a principal componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters? `principal(r, nfactors=m, rotate=n, scores=p)`
+The principal() function will perform a principal componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters?     
+`principal(r, nfactors=m, rotate=n, scores=p)`    
 
 * r is a covariance matrix or a raw data matrix 
 * nfactors specifies the number of principal components to extract (1 by default)
@@ -139,5 +140,5 @@ f2(c(0, 2))
 f2(c(1, 2))
 ```
 
-*Yes
-*No
+* Yes
+* No
