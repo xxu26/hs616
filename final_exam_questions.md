@@ -26,7 +26,7 @@ the k*k correlation matrix among the variables.
 
 ## Lecture 9a
 
-Assume that `library(ggplot2)`has been loaded and mtcars is its built-in 
+Assume that `library(ggplot2)`has been loaded and `mtcars` is its built-in 
 database. Which of the following code will NOT achieve the purpose as the other three?  
 
 * plot(wt~mpg, data=mtcars) 
@@ -36,12 +36,12 @@ database. Which of the following code will NOT achieve the purpose as the other 
 
 ## Lecture 9b
 
-Assume that `library(ggplot2)` has been loaded and database pressure is built-in. Which of the following 2 codes are equivalent?
+Assume that `library(ggplot2)` has been loaded and database `pressure` is built-in. Which of the following 2 codes are equivalent?
 
 ```
 library(ggplot2)
 1. qplot(temperature, pressure, geom="lines")
-2. ggplot(presure, aes(x=temperature, y=pressure)) + geom_line()
+2. ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line()
 3. qplot(temperature, pressure, data=pressure, geom=c("line", "point"))
 4. ggplot(pressure, aex(x=temperature, y=pressure)) + geom_line() + geom_point()
 ```
