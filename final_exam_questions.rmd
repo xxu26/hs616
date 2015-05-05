@@ -137,9 +137,18 @@ f1(1, 2)
 f2 <- function(x)
         return (-5-3*x[1]+4*x[2]+x[1]^2-x[1]*x[2]+x[2]^2)
 
-f2(c(0, 2))
+f2(c(0, 0))
 f2(c(1, 2))
 ```
 
 * Yes
 * No
+
+## Lecture 13b
+In ANOVA model, to denote the complete crossing variables, the code `y ~ A*B*C`
+expands to which of the following formula?
+
+* y ~ A + B + C + A:B + A:C + B:C + A:B:C
+* y ~ A + B + C + A:B + A:C + A:B
+* y ~ A + B + C + A:B:C
+* y ~ A + B + C
