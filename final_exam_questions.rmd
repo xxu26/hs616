@@ -31,7 +31,7 @@ the k*k correlation matrix among the variables.
 
 ## Lecture 9a
 
-Assume that `library(ggplot2)`has been loaded and mtcars is its built-in 
+Assume that `library(ggplot2)`has been loaded and `mtcars` is its built-in 
 database. Which of the following code will NOT achieve the purpose as the other three?  
 
 * plot(wt~mpg, data=mtcars) 
