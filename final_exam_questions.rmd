@@ -152,3 +152,19 @@ expands to which of the following formula?
 * y ~ A + B + C + A:B + A:C + A:B
 * y ~ A + B + C + A:B:C
 * y ~ A + B + C
+
+## Lecture 14a
+In `MASS` package, `stepAIC()`function peforms stepwise model selection (forward, backward, and stepwise) using an exact `AIC criterion`. Which of the saying is NOT correct? 
+
+* In `backward stepwise regression`, we start with a model that includes all predictor variables, and then delete them two at a time until removing variables would degrade the quality of the model. 
+* In `forward stepwise regression`, we add predictor variables one at a time, stopping when the addition of variables would no longer improve the model.  
+* `Stepwise stepwise regression` combine the forward and backward stewsie approaches by evaluating an entered varialbe and deleting it if it doesn't contribute to the model. 
+* Another effective method of variable selection is using the `regsubsets()` function from `leaps package`. 
+
+## Lecture 14b
+The most common approach for evaluating the statistical assumptions in a gression analysis, is to apply the `plot() function` to the object returned by the `lm()`. Doing so produces four graphs that are useful for evaluating the model fit. One of the graphes is "Residual versus Leverage graph" which identifies outliers, high-leverage points, and inluential observations. Which of the following saying is correct? 
+
+* All of these.
+* An outlier is an observation that is not predicted well by the fitted regression model.
+* An observation with a high leverage value has an unusual combination of predictor values. 
+* An influential observation is an observation that has a disproportionate impact on the determination of the model parameters. 
