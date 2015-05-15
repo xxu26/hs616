@@ -42,7 +42,6 @@ database. Which of the following code will NOT achieve the purpose as the other 
 ## Lecture 9b
 
 Assume that `library(ggplot2)` has been loaded and database `pressure` is built-in. Which of the following 2 codes are equivalent?
-
 ```
 library(ggplot2)
 1. qplot(temperature, pressure, geom="lines")
