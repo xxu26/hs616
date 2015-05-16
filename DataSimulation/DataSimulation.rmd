@@ -3,11 +3,13 @@ title: "Data Simulation"
 author: "Xiangyi Xu"
 date: "Thursday, April 09, 2015"
 output:
+  pdf_document: default
   html_document:
     keep_md: yes
 ---
 
-####Pastor-Valero, M. (2013). Fruit and vegetable intake and vitamins C and E are associated with a reduced prevalence of cataract in a Spanish Mediterranean population. BMC Ophthalmology, 13:52. 
+####Data simulation is based on article: 
+Pastor-Valero, M. (2013). Fruit and vegetable intake and vitamins C and E are associated with a reduced prevalence of cataract in a Spanish Mediterranean population. BMC Ophthalmology, 13:52. 
 
 
 
