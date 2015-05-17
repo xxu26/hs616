@@ -1,8 +1,9 @@
 ---
 title: "LectureQuestions"
-author: "Xiangyi Xu (Lydia)"
+author: "Xiangyi Xu"
 date: "May 2015"
 output:
+  pdf_document: default
   html_document:
     keep_md: yes
 ---
@@ -58,7 +59,7 @@ library(ggplot2)
 ## Lecture 10a
 
 The following codes are supposed to implement a version of Newton's method for calculating the square root of y. Which one is NOT correct? 
-```{r flow control}
+```
 y <- 12345
 x <- y/2
 ```
@@ -103,7 +104,7 @@ assign data points to their closet centroids.
 
 Suppose we define the following function in R. What is the result of 
 running `cube(3)` in R after defining the function?
-```{r}
+```
 cube <- function(x, n){
     x^3
 }
@@ -125,23 +126,21 @@ What is an environment in R?
 
 ## Lecture 13a
 
-Will the following two variables f1 and f2 generate the same results?
-```{r define function in two ways}
+```
 f1 <- function(x1, x2) 
         return (-5-3*x1+4*x2+x1^2-x1*x2+x2^2)
-
-f1(0, 0)
-f1(1, 2)
-
 f2 <- function(x)
         return (-5-3*x[1]+4*x[2]+x[1]^2-x[1]*x[2]+x[2]^2)
-
-f2(c(0, 0))
-f2(c(1, 2))
+```
+What is the result of the following expression?
+```
+f1(0, 0) == f2(c(0, 0)) && f1(1, 2) == f2(c(1, 2))
 ```
 
-* Yes
-* No
+* TRUE
+* FALSE
+* MAYBE
+* 42
 
 ## Lecture 13b
 In ANOVA model, to denote the complete crossing variables, the code `y ~ A*B*C`
