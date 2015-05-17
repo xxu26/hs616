@@ -45,10 +45,10 @@ database. Which of the following code will NOT achieve the purpose as the other 
 Assume that `library(ggplot2)` has been loaded and database `pressure` is built-in. Which of the following 2 codes are equivalent?
 ```
 library(ggplot2)
-1. `qplot(temperature, pressure, data=pressure, geom="line")`
-2. `ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line()`
-3. `qplot(temperature, pressure, data=pressure, geom=c("line", "point"))`
-4. `ggplot(pressure, aex(x=temperature, y=pressure)) + geom_line() + geom_point()`
+1. qplot(temperature, pressure, data=pressure, geom="line")
+2. ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line()
+3. qplot(temperature, pressure, data=pressure, geom=c("line", "point"))
+4. ggplot(pressure, aex(x=temperature, y=pressure)) + geom_line() + geom_point()
 ```
 
 * 1 and 2
