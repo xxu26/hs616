@@ -1,4 +1,5 @@
 # hs616
-Statistical R Analytics
-All assignments and related work. 
+This repository is for USF - Statistical R Analytics
+deliverables. 
+Spring 2015
 
