@@ -48,7 +48,7 @@ library(ggplot2)
 1. qplot(temperature, pressure, data=pressure, geom="line")
 2. ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line()
 3. qplot(temperature, pressure, data=pressure, geom=c("line", "point"))
-4. ggplot(pressure, aex(x=temperature, y=pressure)) + geom_line() + geom_point()
+4. ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line() + geom_point()
 ```
 
 * 1 and 2
@@ -85,10 +85,10 @@ build your app.
 
 To standardize each variable in a dataset for analysis, we may use scale() function. The function equals to which code snippet of the following?
 
-* df1 <- apply(mydata, 2, function(x) {(x-mean(x))/sd(x)})
-* df2 <- apply(mydata, 2, function(x) {x/max(x)})
-* df3 <- apply(mydata, 2, function(x) {(x+mean(x))/sd(x)})
-* df4 <- apply(mydata, 2, function(x) {(x-mean(x))/mad(x)})
+* `df1 <- apply(mydata, 2, function(x) {(x-mean(x))/sd(x)})`
+* `df2 <- apply(mydata, 2, function(x) {x/max(x)})`
+* `df3 <- apply(mydata, 2, function(x) {(x+mean(x))/sd(x)})`
+* `df4 <- apply(mydata, 2, function(x) {(x-mean(x))/mad(x)})`
 
 ## Lecture 11b
 
@@ -146,10 +146,10 @@ f1(0, 0) == f2(c(0, 0)) && f1(1, 2) == f2(c(1, 2))
 In ANOVA model, to denote the complete crossing variables, the code `y ~ A*B*C`
 expands to which of the following formula?
 
-* y ~ A + B + C + A:B + A:C + B:C + A:B:C
-* y ~ A + B + C + A:B + A:C + A:B
-* y ~ A + B + C + A:B:C
-* y ~ A + B + C
+* `y ~ A + B + C + A:B + A:C + B:C + A:B:C`
+* `y ~ A + B + C + A:B + A:C + A:B`
+* `y ~ A + B + C + A:B:C`
+* `y ~ A + B + C`
 
 ## Lecture 14a
 In `MASS` package, `stepAIC()`function peforms stepwise model selection (forward, backward, and stepwise) using an exact `AIC criterion`. Which of the saying is NOT correct? 
