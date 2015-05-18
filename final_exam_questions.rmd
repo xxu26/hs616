@@ -11,7 +11,7 @@ output:
 
 ## Lecture 8a
 
-The principal() function will perform a principal componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters?                
+The principal() function in `library("psych")`will perform a principal-componets analysis in R, starting with a matrix. The format is as the following. Which of the following decription is NOT correct regarding the parmaters?                
 `principal(r, nfactors=m, rotate=n, scores=p)`                     
 
 * r is a covariance matrix or a raw data matrix 
