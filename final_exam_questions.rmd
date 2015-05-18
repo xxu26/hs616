@@ -92,7 +92,7 @@ To standardize each variable in a dataset for analysis, we may use scale() funct
 
 ## Lecture 11b
 
-In the partitioning approach, the most common method is the K-means cluster analysis. Which of the following statement is correct?
+In the partitioning approach, the most common method is the K-means cluster analysis. The following statements cover different steps in the analysis process of applying K-means. Which of the following statement is correct?
 
 * All of the statements. 
 * Select k centroids; assign each data point to its closet centroid.
@@ -160,7 +160,7 @@ In `MASS` package, `stepAIC()`function peforms stepwise model selection (forward
 * Another effective method of variable selection is using the `regsubsets()` function from `leaps package`. 
 
 ## Lecture 14b
-The most common approach for evaluating the statistical assumptions in a gression analysis, is to apply the `plot() function` to the object returned by the `lm()`. Doing so produces four graphs that are useful for evaluating the model fit. One of the graphes is "Residual versus Leverage graph" which identifies outliers, high-leverage points, and inluential observations. Which of the following saying is correct? 
+The most common approach for evaluating the statistical assumptions in a regression analysis, is to apply the `plot() function` to the object returned by the `lm()`. Doing so produces four graphs that are useful for evaluating the model fit. One of the graphes is "Residual versus Leverage graph" which identifies outliers, high-leverage points, and inluential observations. Which of the following saying is correct? 
 
 * All of these.
 * An outlier is an observation that is not predicted well by the fitted regression model.
