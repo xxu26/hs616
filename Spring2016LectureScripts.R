@@ -1,3 +1,4 @@
+#Week1
 v <- c("hello", "world")
 v2 <- 1:20
 
@@ -44,7 +45,7 @@ df2[3,"c1"]<df2[4,"c1"]
 
 
 
-
+#Week2
 #read file from file store
 babies <-read.csv("babies.txt") #look at Environment !!
 babies <-read.csv("babies.txt", sep="")
@@ -1323,6 +1324,784 @@ g + geom_histogram(binwidth=1, position="dodge")+
 # Overlaid histogram with position="identity"
 g + geom_histogram(binwidth=1, alpha=.5, position="identity") +
   labs(title="Overlaid Histogram: position=identity")
+
+
+
+
+
+#Week 6
+
+
+norm1 <- rnorm(1000)
+norm2 <- rnorm(1000,5,3) 
+norm3 <- rnorm(100, mean=20, sd=10) 
+
+df_norm <- data.frame(norm1,norm2, norm3)
+
+# Get summary statistics for df_norm
+summary(df_norm)  ######## ######## ######## ######## ########
+
+# Use apply to get the varianceof each distibution
+#  NB: that apply must have a function arguement to apply: use variance
+apply(df_norm,2,var)   ######## ######## ######## ######## ########
+
+library (reshape2)
+babies2 <- read.csv("babies2.csv")
+# BTW, summary automatically removes NAs from min, max, mean, etc
+summary(babies2)
+
+cor(babies2[2:8]) #default is "everything"
+cor(babies2[2:8], use="everything") #NA if either column has any NA
+cor(babies2[2:8], use="all.obs") # Error if a single NA in any column
+# Next two lines keep only *rows* where every entry is not NA
+cor(babies2[2:8], use="na.or.complete")
+cor(babies2[2:8], use="complete.obs") # Error if there is no row that is complete
+
+install.packages("GGally")
+library (GGally)
+
+# cat vs cat:  bar, box
+# cat vs numeric: boxplot , hist
+# numeric vs numeric: scatter, cor
+babies2$smoke <- factor(babies2$smoke)
+ggpairs(babies2[6:9])
+
+# One sample t-test to test null hypothesis that true mean is
+# equal to an expected value
+# Reject null hypothesis if p-value < alpha
+t.test(babies2$age, mu=28) # reject null hypothesis?
+t.test(babies2$age, mu=15) # reject null hypothesis?
+t.test(babies2$age, mu=27) # reject null hypothesis?
+
+
+
+#Wk6 part2
+# z-score (standard score)
+# Can compare two scores from different *normal* distributions
+# We are basically mapping the distribution to the standard normal
+
+# standard normal distribution
+norm2 <- rnorm(10000,10,4)
+summary(norm2)
+m <- mean(norm2)
+s <- sd(norm2)
+# z-score(1): val is how many SDs above the mean?
+val <- 18
+z <- (val - m)/s  
+z
+
+# normal distribution with mean=30 and sd=3
+norm3 <- rnorm(10000, 30,3)
+summary(norm3)
+m <- mean(norm3)
+s <- sd(norm3)
+# What value in this distribution is comparable to val of norm1?
+# Use formula for z z-score, solve for s
+x <- z*s + m
+x
+# Check:
+z <- (x - m)/s  # 33 is how many SDs above the mean?
+z
+
+
+#The p-value is the probability that the observed data could happen,
+# under the condition that the null hypothesis is true
+#alpha (significance level) the probability of making a type1 error
+# type I error is detecting an effect that is not present
+# alpha, simply stated, is the probability of making a wrong decision
+
+setwd("/Users/Pat/Documents/R/HS_616/assign")
+babies <- read.table("babies.txt", header=TRUE)
+
+babies2 <- read.csv("babies2.csv")
+babies2<-babies2[, -1]  
+summary(babies2)
+
+s <- sd(babies2$bwt)
+stats<-summary(babies2$bwt)
+m <- stats[4]  
+m
+
+# One sample t-test to test null hypothesis that true mean is
+# equal to an expected value
+# Reject null hypothesis if p-value < alpha
+t.test(babies2$age, mu=28) # reject null hypothesis?
+t.test(babies2$age, mu=15) # reject null hypothesis?
+t.test(babies2$age, mu=27) # reject null hypothesis?
+ 
+t.test(babies$bwt, babies2$bwt)
+
+
+#Week7
+set.seed(100)
+
+m <- 1
+b <- 0
+x <- rnorm(20)	
+#Generate line with slope m,intercept b, and random noise
+y <- m*x + b + rnorm(length(x), mean=0, sd=1)
+
+plot(x,y) # with noise
+abline(b, m, lty=2, col="green") # original line
+
+fit<- lm (y~ x)
+c <-coef(fit)
+summary(fit) # data fits linear model with R^2 0.6696
+
+# Good fit to a linear model
+# Not as good a fit to the line data originated from (green)
+library (ggplot2)
+df <- data.frame(x,y)
+g <- ggplot(df,aes(x=x, y=y))
+g + geom_point() + 
+  geom_abline(intercept=c[1],slope=c[2]) +
+  geom_abline(intercept=b, slope=m, lty=2, col="green")
+
+
+#Week8
+
+library(reshape2)
+library(ggplot2)
+
+# Written by Andy Field
+logisticPseudoR2s <- function(LogModel) {
+  dev <- LogModel$deviance 
+  nullDev <- LogModel$null.deviance 
+  modelN <-  length(LogModel$fitted.values)
+  R.l <-  1 -  dev / nullDev
+  R.cs <- 1- exp ( -(nullDev - dev) / modelN)
+  R.n <- R.cs / ( 1 - ( exp (-(nullDev / modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2  ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2        ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2           ", round(R.n, 3),    "\n")
+}
+
+
+
+
+
+#Week9
+setwd("/Users/Pat/Documents/R/HS_616/lecture_scripts")
+
+#install.packages("ppcor")
+library (ppcor)
+library(ggplot2)
+library(reshape2)
+
+
+logisticPseudoR2s <- function(LogModel) {
+  dev <- LogModel$deviance 
+  nullDev <- LogModel$null.deviance 
+  modelN <-  length(LogModel$fitted.values)
+  R.l <-  1 -  dev / nullDev
+  R.cs <- 1- exp ( -(nullDev - dev) / modelN)
+  R.n <- R.cs / ( 1 - ( exp (-(nullDev / modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2  ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2        ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2           ", round(R.n, 3),    "\n")
+}
+
+# PSWQ: degree to which the player worries in general
+# Anxious: new measure of the player's anxiety just before the penalty kick
+# Previous: percentage of penalties scored by the player over their career
+# Scored: outcome: whether the penalty kick scored
+
+penalties <- read.table(file="penalty.txt", header = T)  # tab-delimited file with a header
+
+# Exploratory visualizations
+g <- ggplot(data=penalties)
+g + geom_histogram(aes(x=PSWQ),binwidth=1, color = 5)  
+
+g + geom_histogram(aes(x=PSWQ, fill=Scored),binwidth=1,position="dodge")  # position="identity" for overlaid
+g + geom_histogram(aes(x=Anxious, fill=Scored), binwidth=1,position="dodge")
+g + geom_histogram(aes(x=Previous, fill=Scored), binwidth=1,position="dodge")
+
+g + geom_density(aes(x=PSWQ, fill=Scored), alpha=.5)   
+g + geom_density(aes(x=Anxious, fill=Scored), alpha=.5)  
+g + geom_density(aes(x=Previous, fill=Scored), alpha=.5)   
+
+# Tests for normality of data:
+# null-hypothesis is that population is normally distributed
+# high p-value -> don't reject null, infer population is normally distributed
+shapiro.test(penalties$PSWQ)
+shapiro.test(penalties$PSWQ[penalties$Scored=="Scored"])
+shapiro.test(penalties$PSWQ[penalties$Scored=="Missed"])
+shapiro.test(penalties$Anxious[penalties$Scored=="Scored"]) # normally dist
+shapiro.test(penalties$Anxious[penalties$Scored=="Missed"]) # normally dist
+shapiro.test(penalties$Previous[penalties$Scored=="Scored"])
+shapiro.test(penalties$Previous[penalties$Scored=="Missed"])
+
+
+# A parameter of the 2-sample t.test is var.equal: indicates
+#  whether variances of the 2 samples are equal.
+# Could test for equality of variances:
+#  var.test if normally distributed, ansari.test if not
+# However it is considered safe to use t.test default var.equal=F 
+#    even if variances are, in fact, equal.
+# So can skip test of variances unless t.test results 
+#    turn out to be very near significance level alpha
+
+# T-tests to compare values of scored with missed
+t.test(PSWQ ~ Scored, data=penalties) #default var.equal=F
+t.test(Anxious ~ Scored, data=penalties)
+# Can test variances:
+var.test(penalties$Anxious[penalties$Scored=="Missed"],penalties$Anxious[penalties$Scored=="Scored"])
+# Since variances are the same, we can redo t.test with var.equal=T:
+#   results turn out to be very close to those with var.equal=F
+t.test(Anxious ~ Scored, data=penalties, var.equal=T)
+t.test(Previous ~ Scored, data=penalties)
+
+
+
+# Look for Correlations and partial correlations
+cor(penalties[-4])
+# accounts for the effect of controlled-for variables on both of the compared vars 
+pcor(penalties[-4])     
+# can convert Scored to 0,1 before passing to pcor (or cor) 
+pcor(as.numeric(penalties)) 
+
+#cor and pcor require that dichotomous variables be coded as 0,1
+cor.test(penalties$Scored, penalties$Previous) 
+
+#recode column Scored as 0,1
+values <- ifelse(penalties$Scored=="Missed",0,1)
+penalties$Scored <-values
+cor(penalties)
+cor.test(penalties$Scored, penalties$Anxious)
+cor.test(penalties$Scored, penalties$PSWQ) # method="spearman" almost same
+# r= -0.6676552 so R^2= 0.4457635: PSWQ accounts for 44.6% of the variabliltiy of Scored
+
+# Variable selection: start with all variables, then see how the 
+#  model is effected if we leave one out
+# AIC (Akaike information criterion): relative estimate of information lost 
+#    smaller is good: less informaiton lost
+fit_all <- glm(Scored ~ ., family=binomial(link="logit"), data=penalties)
+summary(fit_all)  #AIC: 55.416
+# log (p(Scored)/p(Missed) ) = -0.25137 PSWQ 
+#  for other estimated coef, they are likely to have this fit by chance
+
+# NB: If we decide to use any model we should rerun without the insigificant terms
+
+fit.minus.prev <- glm(Scored ~ . -Previous, family=binomial(link="logit"), data=penalties)
+summary(fit.minus.prev) #AIC: 56.074
+# log (p(Scored)/p(Missed) ) = -0.2264 PSWQ -0.1190 Anxious , intercept coef is insignificant
+
+fit.minus.anxious <- glm(Scored ~ . -Anxious, family=binomial(link="logit"), data=penalties)
+summary(fit.minus.anxious) # AIC: 54.662 # best of these models we ran that have intercept
+# log (p(Scored)/p(Missed) ) = -0.23009  PSWQ + 0.06480 Previous, intercept coef is insignificant 
+
+fit.minus.PSWQ <- glm(Scored ~ . -PSWQ, family=binomial(link="logit"), data=penalties)
+summary(fit.minus.PSWQ) # AIC: 67.141
+# all estimated coef are likely to have this fit by chance
+
+fit.PSWQ <- glm(Scored ~ PSWQ, family=binomial(link="logit"), data=penalties)
+summary(fit.PSWQ) # AIC: 64.516
+# log (p(Scored)/p(Missed) ) = -0.29397  PSWQ + 4.90010
+# Use this model to predict the probablilities of scoring vs PSWQ
+pred <- predict(fit.PSWQ, type="response") 
+g<- ggplot(penalties, aes(x=PSWQ, y=Scored))
+g +  geom_point()  +
+  geom_point(aes(x=PSWQ, y= pred), color="red") 
+
+# Look at the distribution of the model residuals
+ggplot(fit.PSWQ, aes(x=.resid)) + geom_histogram(binwidth=.2)
+# Investigate goodness-of-fit of model using only PSQW
+logisticPseudoR2s(fit.PSWQ)
+
+# After fitting the above models  we find fit.minus.anxious is the best
+# but the intercept is insignificant so rerun without it:
+fit.minus.anxious.inter <- glm(Scored ~ . -Anxious -1, family=binomial(link="logit"), data=penalties)
+summary(fit.minus.anxious.inter) # AIC: 53.255  # best of these models
+# log (p(Scored)/p(Missed) ) = -0.18223  PSWQ + 0.07639 Previous **********
+# Visualize the relationship of the fitted variables on righthand side to Scored 
+#  overlaid with the probablilities of scoring as predicted by model
+pred_best <- predict(fit.minus.anxious.inter, type="response") 
+gbest <- ggplot(penalties, aes(x=I(-0.18223*PSWQ+0.07639*Previous), y=Scored))
+gbest +  geom_point()  +
+  geom_point(aes(x=I(-0.18223*PSWQ+0.07639*Previous), y= pred_best), color="red") 
+
+# Ex of other models that would take time to investigate
+fit.part<- glm(Scored ~ PSWQ + Previous + Anxious:PSWQ + Anxious:Previous, family=binomial(link="logit"), data=penalties)
+summary(fit.part) #AIC: 57.797 
+# all estimated coef are likely to have this fit by chance
+
+# Use built-in step fucntion (with caution) to select variables 
+#  to try differenct models and minimize AIC:
+fit.null <- glm(Scored ~ 1, family=binomial(link="logit"), data=penalties)
+summary(fit.null) #AIC:
+
+fit.full <- glm(Scored ~ Previous*Anxious*PSWQ, family=binomial(link="logit"), data=penalties)  
+summary(fit.full) #AIC: 58.392 
+# all estimated coef are likely to have this fit merely by chance
+
+# Caution in using the step function to automate the selection of variables
+# Is known to sometimes miss the best model
+fit.step <- step(fit.null, 
+    scope=list(lower=fit.null, upper=fit.full), direction=  "both")
+# best fit: Scored ~ PSWQ + Previous + PSWQ:Previous  AIC=54.25
+
+fit_found <- glm(Scored ~ PSWQ + Previous + PSWQ:Previous,family=binomial(link="logit"), data=penalties)
+summary(fit_found)
+# log (p(Scored)/p(Missed) ) = -0.584338 PSWQ, other coeficients insignificant
+
+# Pasted from above:
+# fit.minus.anxious <- glm(Scored ~ . -Anxious, family=binomial(link="logit"), data=penalties)
+# log (p(Scored)/p(Missed) ) = -0.23009  PSWQ + 0.06480 Previous 
+
+# Investigate goodness-of-fit of this model
+logisticPseudoR2s(fit.minus.anxious)
+
+
+# Use this model to estimate the probability of scoring if 
+# both PSWQ and Previous are their mean values
+newdf = data.frame( PSWQ=mean(penalties$PSWQ), Previous=mean(penalties$Previous), Anxious=mean(penalties$Anxious))
+predict(fit.minus.anxious, newdf, type="response") 
+
+# Do same with the insignificant  intercept removed:
+predict(fit.minus.anxious.inter, newdf, type="response") 
+
+
+library (stats)
+# test fit.minus.anxious improvement over null   *****************************
+modelChi <- fit.minus.anxious$null.deviance - fit.minus.anxious$deviance
+chidf <- fit.minus.anxious$df.null - fit.minus.anxious$df.residual
+
+# pchisq is cumulative distribution function for the chi-squared 
+#  (chi^2) distribution with chidf degrees of freedom for
+#   quantile = modelChi = null deviance - model deviance
+# So (1 - pchisq) is the prob of a test stastistic this good or better by chance
+chisq.prob <- 1 - pchisq(modelChi, chidf)
+modelChi; chidf; chisq.prob # chisq.prob = 1.1533e-12
+# indicates improved fit in this model over intercept only (null model) is significant
+
+
+
+#Week10
+#part1
+setwd("/Users/Pat/Documents/R/HS_616/lecture_scripts")
+
+temper <- read.csv("weather.data.csv")
+plot(temper$month,temper$upper)
+plot(temper$yr,temper$upper)
+
+fit_month0 <- lm(temper$upper~ temper$month)
+summary(fit_month0)
+plot(fit_month0,1)
+
+temper2 <- temper   ##################
+## fill in your code here to correct the problem with this dataset
+
+plot(temper2$month,temper2$upper)
+plot(temper2$yr,temper2$upper)
+
+fit_month <- lm(temper2$upper~ temper2$month)
+summary(fit_month)
+plot(fit_month, 1)
+
+fit_month_1 <- lm(temper2$upper~ temper2$month -1)
+summary(fit_month_1)
+plot(fit_month_1,1)
+
+fit_month_yr<- lm(temper2$upper~ temper2$month + temper2$yr)
+summary(fit_month_yr)
+plot(fit_month_yr,1)
+
+fit_month_yr_1<- lm(temper2$upper~ temper2$month + temper2$yr -1)
+summary(fit_month_yr_1)
+plot(fit_month_yr_1,1)
+
+
+# fill in your exploratory code here
+
+
+#part2
+
+# set the working directory
+setwd("/Users/Pat/Documents/R/HS_616/lecture_scripts")
+
+# There is a MySQL database for public access at genome-mysql.cse.ucsc.edu.
+# This server allows MySQL access to the same set of data currently available on the public UCSC Genome Browser site
+
+#install.packages("RMySQL")  # Run the first time
+install.packages("sqldf")
+library(RMySQL) # Database Interface and 'MySQL' Driver for R
+library(sqldf)  # Perform SQL selects on R data frames
+
+# Adapted from: http://playingwithr.blogspot.com/2011/05/accessing-mysql-through-r.html
+#Establish a connection to the UCSC genone browser
+con = dbConnect(MySQL(), user='genome', dbname='hg19', host='genome-mysql.cse.ucsc.edu')
+# Return a list of the tables in our connection
+dbListTables(con)
+# Return a list of the fields in a specific table
+dbListFields(con, 'knownGene')
+dbListFields(con, 'refGene')
+
+#Run a query
+# To retrieve results a chunk at a time, use dbSendQuery, dbFetch, then dbClearResult
+# Alternatively, if you want all the results (and they'll fit in memory) use dbGetQuery
+#  which sends, fetches and clears for you.
+resultSet <- dbSendQuery(con, 'SELECT * FROM refGene')
+
+# Fetch records from a previously executed query
+#  and save as a data frame object. 
+#  n specifies the number of records to retrieve, n=-1 retrieves all pending records
+hg19_refgene = dbFetch(resultSet,n=-1, stringsAsFactors=F)
+str(hg19_refgene)
+head(hg19_refgene)
+
+# hg19_refgeneF = dbFetch(resultSet,n=-1, stringsAsFactors=T)
+# str(hg19_refgeneF)
+# head(hg19_refgeneF)
+
+
+# A data frame is used for storing data tables. It is a list of vectors of equal length
+# You can think of the vectors as columns in a database or excel spreadsheet
+typeof(hg19_refgene)
+colnames(hg19_refgene)
+dbClearResult(resultSet)
+
+# Disconnect when done with the mysql database
+dbDisconnect(con)
+
+
+# Add a new column to hold transcription start site (tss) relative to the strand
+#  on the + strand, this is the left end of the range (txStart), on the - strand it is the right end (txEnd)
+hg19_refgene$tss <- ifelse(hg19_refgene$strand == '+', hg19_refgene$txStart, hg19_refgene$txEnd)
+
+write.table(hg19_refgene, file = "hg19_refgene2.txt", append = FALSE, quote = FALSE, sep = "\t",
+            eol = "\n", na = "NA", dec = ".", row.names = TRUE,
+            col.names = TRUE, qmethod = c("escape", "double"),
+            fileEncoding = "")
+
+# Create a subset of the data
+hg19 <- hg19_refgene[, c("name", "chrom", "strand", "tss")]
+summary(hg19)
+
+
+
+#Diabetes_post
+
+#VIF values greater than 10 may indicate that multicollinearity is unduly influencing your regression results. 
+#If you see high VIF values, you may want to remove some of the correlated predictors from your model.
+
+#install.packages("foreign")
+library(foreign)
+brca <- read.arff("Breast_Cancer_0123_PFL.arff")
+
+logisticPseudoR2s <- function(LogModel) {
+  dev <- LogModel$deviance 
+  nullDev <- LogModel$null.deviance 
+  modelN <-  length(LogModel$fitted.values)
+  R.l <-  1 -  dev / nullDev
+  R.cs <- 1- exp ( -(nullDev - dev) / modelN)
+  R.n <- R.cs / ( 1 - ( exp (-(nullDev / modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2  ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2        ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2           ", round(R.n, 3),    "\n")
+}
+
+sum_na <-function(x)  {return (sum(is.na(x)))}
+apply (brca, 2, sum_na)
+
+sum(brca$Cyp1B1_48_loc3 ==3) #5
+sum(brca$Cyp1B1_119_loc4 ==3) #5
+sum(brca$GSTM1_loc8 ==3) #9
+names(brca)
+is.na(brca$Cyp1B1_48_loc3) <- which(brca$Cyp1B1_48_loc3 ==3)
+is.na(brca$Cyp1B1_119_loc4) <- which(brca$Cyp1B1_119_loc4 ==3)
+is.na(brca$GSTM1_loc8) <- which(brca$GSTM1_loc8 ==3)
+
+apply (brca, 2, sum_na)
+
+
+# family=binomial(link="log") indicates fit to poisson rather than logistic
+epirr <- read.arff("DataSets_2loc/EPIRR.34-caco10.arff")
+fit_epirr <- glm(class ~ location5 + location10 , family=binomial(link="log"), data=epirr)
+summary(fit_epirr)
+logisticPseudoR2s(fit_epirr)  # Nagelkerke R^2  0.281, with link=log: R^2=0.316, AIC=2242.5
+
+fit2_epirr <- glm(class ~ location5*location10 , family=binomial(link="log"), data=epirr)
+summary(fit2_epirr)
+logisticPseudoR2s(fit2_epirr)# Nagelkerke R^2   0.346, with link=log: R^2=0.346, AIC=2189.1
+
+fit3_epirr <- glm(class ~ location5:location10 , family=binomial(link="log"), data=epirr)
+summary(fit3_epirr) # deviances and AIC are same as fit2_epirr, but coef are now sig
+logisticPseudoR2s(fit3_epirr)# Nagelkerke R^2   0.346
+# but location52:location102 not defined because of singularities
+
+#when we use -1 to remove the constant term, singularities are gone,
+#  we get a coef for location52:location102
+fit4_epirr <- glm(class ~ location5:location10 -1 , family=binomial(link="logit"), data=epirr)
+summary(fit4_epirr)# should be interactions only
+logisticPseudoR2s(fit4_epirr)# Nagelkerke R^2   0.346
+
+plot(fit_epirr,1)
+plot(fit2_epirr,1)
+plot(fit3_epirr,1)
+plot(fit4_epirr,1)
+
+
+#Exploration
+sum(epirr$location5==2 & epirr$location10==2 ) #873  ** striking
+sum(epirr$location5==2 & epirr$location10==1 ) #289
+sum(epirr$location5==2 & epirr$location10==0 ) #66
+sum(epirr$location5==1 & epirr$location10==2 ) #263
+sum(epirr$location5==0 & epirr$location10==2 ) #61
+
+sum(epirr$location5==1 & epirr$location10==1 ) #288
+sum(epirr$location5==0 & epirr$location10==0 ) #18
+
+
+#geneInterPost
+
+#VIF values greater than 10 may indicate that multicollinearity is unduly influencing your regression results. 
+#If you see high VIF values, you may want to remove some of the correlated predictors from your model.
+
+
+setwd("/Users/Pat/Documents/R/HS_617/geneInters")
+
+#install.packages("foreign")
+library(foreign)
+brca <- read.arff("Breast_Cancer_0123_PFL.arff")
+
+
+logisticPseudoR2s <- function(LogModel) {
+  dev <- LogModel$deviance 
+  nullDev <- LogModel$null.deviance 
+  modelN <-  length(LogModel$fitted.values)
+  R.l <-  1 -  dev / nullDev
+  R.cs <- 1- exp ( -(nullDev - dev) / modelN)
+  R.n <- R.cs / ( 1 - ( exp (-(nullDev / modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2  ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2        ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2           ", round(R.n, 3),    "\n")
+}
+
+sum_na <-function(x)  {return (sum(is.na(x)))}
+apply (brca, 2, sum_na)
+
+sum(brca$Cyp1B1_48_loc3 ==3) #5
+sum(brca$Cyp1B1_119_loc4 ==3) #5
+sum(brca$GSTM1_loc8 ==3) #9
+names(brca)
+is.na(brca$Cyp1B1_48_loc3) <- which(brca$Cyp1B1_48_loc3 ==3)
+is.na(brca$Cyp1B1_119_loc4) <- which(brca$Cyp1B1_119_loc4 ==3)
+is.na(brca$GSTM1_loc8) <- which(brca$GSTM1_loc8 ==3)
+
+apply (brca, 2, sum_na)
+
+
+# family=binomial(link="log") indicates fit to poisson rather than logistic
+epirr <- read.arff("DataSets_2loc/EPIRR.34-caco10.arff")
+fit_epirr <- glm(class ~ location5 + location10 , family=binomial(link="log"), data=epirr)
+summary(fit_epirr)
+logisticPseudoR2s(fit_epirr)  # Nagelkerke R^2  0.281, with link=log: R^2=0.316, AIC=2242.5
+
+fit2_epirr <- glm(class ~ location5*location10 , family=binomial(link="log"), data=epirr)
+summary(fit2_epirr)
+logisticPseudoR2s(fit2_epirr)# Nagelkerke R^2   0.346, with link=log: R^2=0.346, AIC=2189.1
+
+fit3_epirr <- glm(class ~ location5:location10 , family=binomial(link="log"), data=epirr)
+summary(fit3_epirr) # deviances and AIC are same as fit2_epirr, but coef are now sig
+logisticPseudoR2s(fit3_epirr)# Nagelkerke R^2   0.346
+# but location52:location102 not defined because of singularities
+
+#when we use -1 to remove the constant term, singularities are gone,
+#  we get a coef for location52:location102
+fit4_epirr <- glm(class ~ location5:location10 -1 , family=binomial(link="logit"), data=epirr)
+summary(fit4_epirr)# should be interactions only
+logisticPseudoR2s(fit4_epirr)# Nagelkerke R^2   0.346
+
+plot(fit_epirr,1)
+plot(fit2_epirr,1)
+plot(fit3_epirr,1)
+plot(fit4_epirr,1)
+
+
+
+#Exploration
+sum(epirr$location5==2 & epirr$location10==2 ) #873  ** striking
+sum(epirr$location5==2 & epirr$location10==1 ) #289
+sum(epirr$location5==2 & epirr$location10==0 ) #66
+sum(epirr$location5==1 & epirr$location10==2 ) #263
+sum(epirr$location5==0 & epirr$location10==2 ) #61
+
+sum(epirr$location5==1 & epirr$location10==1 ) #288
+sum(epirr$location5==0 & epirr$location10==0 ) #18
+
+
+#Week11 SVM
+
+#Practical session: Introduction to SVM in R
+#Jean-Philippe Vert
+#https://escience.rpi.edu/data/DA/svmbasic_notes.pdf
+
+#install.packages("kernlab")
+#install.packages("ROCR")
+library(kernlab)
+library(kernlab)
+n <- 150 # number of data points
+p <- 2 # dimension
+
+sigma <- 1 # variance of the distribution
+meanpos <- 0 # centre of the distribution of positive examples
+meanneg <- 3 # centre of the distribution of negative examples
+npos <- round(n/2) # number of positive examples
+nneg <- n-npos # number of negative examples
+
+# Generate the positive and negative examples
+xpos <- matrix(rnorm(npos*p,mean=meanpos,sd=sigma),npos,p)
+xneg <- matrix(rnorm(nneg*p,mean=meanneg,sd=sigma),npos,p)
+x <- rbind(xpos,xneg)
+
+# Generate the labels
+y <- matrix(c(rep(1,npos),rep(-1,nneg)))
+
+# Visualize the data
+plot(x,col=ifelse(y>0,1,2))
+legend("topleft",c('Positive','Negative'),col=seq(2),pch=1,text.col=seq(2))
+
+#Now we split the data into a training set (80%) and a test set (20%):
+## Prepare a training and a test set ##
+ntrain <- round(n*0.8) # number of training examples
+tindex <- sample(n,ntrain) # indices of training samples
+xtrain <- x[tindex,]
+xtest <- x[-tindex,]
+ytrain <- y[tindex]
+ytest <- y[-tindex]
+istrain=rep(0,n)
+istrain[tindex]=1
+
+# Visualize
+plot(x,col=ifelse(y>0,1,2),pch=ifelse(istrain==1,1,2))
+legend("topleft",c('Positive Train','Positive Test','Negative Train','Negative Test'),
+       col=c(1,1,2,2),pch=c(1,2,1,2),text.col=c(1,1,2,2))
+
+# load the kernlab package
+library(kernlab)
+
+# train the SVM
+svp <- ksvm(xtrain,ytrain,type="C-svc",kernel='vanilladot',C=100,scaled=c())
+
+# General summary
+svp
+
+# Attributes that you can access
+attributes(svp)
+# For example, the support vectors
+alpha(svp) # alpha vector (possibly scaled)
+# indices of support vectors in data matrix
+#  after the possible effect of na.omit and subset
+alphaindex(svp)
+coef(svp) #The corresponding coefficients times the training labels
+# Use the built-in function to pretty-plot the classifier
+plot(svp,data=xtrain)
+#              plot(scale(x), col=y+2, pch=y+2, xlab="", ylab="")
+w <- colSums(coef(svp)[[1]] * x[unlist(alphaindex(svp)),])
+b <- b(svp)
+
+# Predict labels on test
+ypred = predict(svp,xtest)
+table(ytest,ypred)
+# Compute accuracy
+sum(ypred==ytest)/length(ytest)
+# Compute at the prediction scores
+ypredscore = predict(svp,xtest,type="decision")
+
+
+
+
+
+
+
+
+
+
+#######Schedule
+
+week 0 (before first class meeting get up and runningon R and R studio): 
+ch 1-3 from Lander text 
+ Getting R
+ The R Environment
+ R packages
+
+week 1 ch 3-4 from Lander text 
+ Basics of R 
+ Advanced Data Structures (include data tables)
+
+week 2  ch 6-7 from Lander text 
+ Introduction to R Markdown
+ Reading Data into R
+ Statistical Graphics
+
+week 3 ch 8-9, gloss over 10 from Lander text   
+ Writing R Functions  
+ Control Statements
+ Loops: The Un-R Way to Iterate (gloss over, not on quizzes)
+
+week 4 ch 11-12 from Lander text 
+ Group Manipulation
+ Data Reshaping
+
+week 5  ch 13-14 from Lander text 
+ Manipulating Strings 
+ Probability Distributions
+
+week 6 ch 15 from Lander text 
+ Basic Statistics
+ Brief Intro to ANOVA 
+
+week 7  ch 16 from Lander text  
+ Linear Models (in depth)  
+
+week 8 ch 17-18 from Lander text 
+ Genearalized Linear Models  (17.1) 
+ Survivial Analysis  (17.4)
+ (gloss over other Genearalized Linear Models)
+ Model Diagnostics - basic linear algebra, ANOVA for model comparison
+ Residuals
+ Bootstrap
+
+week 9
+ Using SQL queries with R
+ Data Simulation
+
+week 9
+ Machine Learning   SVM
+ Learning curves
+ ROC curves: sensitivity/specificity tradeoff
+
+week 10
+ RF
+ Regularization and Shrinkage (ch 16 from Lander text)
+
+week 11
+ Dimension reduction
+ PCA
+ Clustering (ch 22 from Lander text)
+
+week 12
+ Nonlinear Models (not on quiz) (ch 20 from Lander text)
+
+week 13
+ Using SQL databases with R
+
+week 14
+ Visualization
+
+week 15
+Quick topics:
+ Time Series and Auto-Correlation (ch 21 from Lander text)
+ Eigenvectors + solving systems of equations + Gauss-Jordan elimination
+ Web scraping
+ Interactive analysis
+
+
+
 
 
 
