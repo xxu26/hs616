@@ -2013,7 +2013,253 @@ sum(ypred==ytest)/length(ytest)
 ypredscore = predict(svp,xtest,type="decision")
 
 
+#Week12
+# A database interface (DBI) definition for communication between R and relational database management systems. 
+# All classes in this package are virtual and need to be extended by the various R/DBMS implementations
+library(DBI)
+# Create temporary in-memory db
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+# imports a local data frame or file into the database.
+dbWriteTable(con, "mtcars", mtcars, row.names = FALSE) # mtcars is part of base R
+dbListTables(con)
+sqliteCopyDatabase(con, "mtcars.db")   # save database to datbase file
+dbDisconnect(con)
 
+# This package embeds the SQLite database engine in R and
+#  provides an interface compliant with the DBI package
+library(RSQLite)
+
+# all data frames in the datasets package are bundled with RSQLite; use connection datasetsDb()
+dsets <- datasetsDb() 
+dbListTables(dsets)
+
+# dbGetQuery is combination of dbSendQuery, dbFetch and dbClearResult
+dbGetQuery(dsets, "select * from iris limit 10")
+
+
+res <- dbSendQuery(dsets, "select * from iris limit 10")  # limits the resultset itself
+dbGetRowCount(res)
+dbFetch(res, n = 02)  # fetches first 2 rows of resultset, can get more later
+dbGetRowCount(res)
+dbHasCompleted(res)
+dbFetch(res)  #  fetches the rest of the resultset
+
+res <- dbGetPreparedQuery(dsets, "SELECT * FROM USArrests WHERE Murder < ?", data.frame(x = 3)) # ***********
+head(res) # res us a data  frame
+
+res <- dbSendQuery(dsets, "SELECT * FROM mtcars WHERE cyl = 4")
+while(!dbHasCompleted(res)){
+	chunk <- dbFetch(res, n = 10) # fetches 10 rows at at time from resultset
+	print(nrow(chunk))
+}
+
+res <- dbSendQuery(dsets, "SELECT * FROM mtcars WHERE cyl = 4")
+dbFetch(res)  # fetches all rows from resultset
+dbClearResult(res)
+#alt:use dbGetQuery which sends, fetches and  clears for you.
+
+sqliteCopyDatabase(dsets, "datasets.sqlite")   # save database to datbase file
+dbDisconnect(dsets) ### moved
+
+#####################################################
+con <- dbConnect(RSQLite::SQLite(), "mtcars.db") # existing database file, not flat file
+dbListTables(con)
+dbReadTable(con, "cars")
+
+dbExistsTable(con, "mtcars")
+res <- dbSendQuery(con, "select * from mtcars")  
+dbFetch(res)  #  fetches the entire resultset
+dbClearResult(con)
+dbDisconnect(con)
+
+
+# http://stackoverflow.com/questions/38549/difference-between-inner-and-outer-joins
+library(RSQLite)
+con <- dbConnect(SQLite(), "inner_outer.sqlite")
+
+a <- data.frame(A=1:4)
+b <- data.frame(B=3:6)
+
+# imports a local data frame or file into the database.
+dbWriteTable(con, "a", a, row.names = FALSE)
+dbWriteTable(con, "b", b)
+dbGetQuery(con, "select * from a INNER JOIN b on a.a = b.b;")
+dbGetQuery(con, "select a.*,b.*  from a,b where a.a = b.b;")
+dbGetQuery(con, "select * from a LEFT OUTER JOIN b on a.a = b.b;")
+dbDisconnect(con)
+
+
+# Sandy Muspratt: Creating SQLite databases from R
+# http://sandymuspratt.blogspot.com/2012/11/r-and-sqlite-part-1.html
+# Two ways in which R can communicate with SQLite databases: 
+#   using the RSQLite package and using the sqldf package. 
+# Both packages use reasonably standard versions of SQL to administer and manage the database
+#  but they differ in the way meta statements are constructed.
+
+# First, the required packages are loaded. Both RSQLite and sqldf
+# (and others too) are loaded by the following command.
+library(sqldf)
+
+setwd("/Users/Pat/Documents/R/HS_616/assign/DB")
+db <- dbConnect(SQLite(), dbname="babies.sqlite")
+
+# The following sqldf command creates babies.sqlite in R's working directory.
+sqldf("attach 'babies.sqlite' as new")
+
+# 1: import data from csv file into data frame, from data frame to table babies
+babies2 <- read.csv("babies2.csv", header=T)
+names(babies2)[9] <- "age_level"
+dbWriteTable(conn = db, name = "babies", value = babies2, row.names = FALSE) # leave out header
+dbListFields(db, "babies")         # The columns in a table
+dbReadTable(db, "babies")      # The data in a babies table
+
+
+# 2: import data directly from csv file into the table babies
+dbWriteTable(conn = db, name = "babies", value = "babies2.csv",
+             row.names = FALSE, header = TRUE)
+dbListTables(db)                   # The tables in the database
+dbListFields(db, "babies")         # The columns in a table
+dbReadTable(db, "babies")          # The data in a table
+# if the file displays  \r line endings then it was created on a windows machine:
+# drop the tables and re-import with eol = "\r\n"
+dbRemoveTable(db, "babies")   # Remove the table
+dbWriteTable(conn = db, name = "babies", value = "babies2.csv",
+             row.names = FALSE, header = TRUE, eol = "\r\n")
+dbReadTable(db, "babies")          # The data in a table
+dbGetQuery(db, "select age_level from babies")
+dbGetQuery(db, "select distinct(age_level) from babies")
+
+
+
+#13 Week 13SQL
+
+library(DBI)
+library(RSQLite)
+
+con <- dbConnect(RSQLite::SQLite(), "ecolik12.db") # existing database file, not flat file
+dbListTables(con)
+dbReadTable(con, "promoters")
+dbExistsTable(con, "genes")
+
+dbGetQuery(con, "SELECT name FROM promoters ORDER BY name")
+
+dbGetQuery(con, "SELECT* FROM genes limit 3")
+
+#Find all the types and subtypes of genes
+query <- "SELECT type, subtype 
+  FROM genes 
+  GROUP BY type, subtype"
+dbGetQuery(con, query)
+
+# Find names of rRNAs and their subtypes
+query <- "SELECT name, subtype 
+  FROM genes 
+  WHERE type = 'rRNA'"
+dbGetQuery(con, query)
+
+# Find all transcription units whose promoter is lac
+query <- "SELECT *
+  FROM transcript_units tu 
+  WHERE prom_name = 'lac' ";
+dbGetQuery(con, query)  
+
+# Find the lac transcription units (tu name begins with 'lac')
+query <- "SELECT *
+  FROM transcript_units tu 
+  WHERE name like 'lac%' ";
+dbGetQuery(con, query)  
+
+# Find the names of genes that are in the lac transription units
+query <- "SELECT g.name
+  FROM transcript_units tu 
+  INNER JOIN genes g on tu.fk_gene_name = g.name 
+  WHERE tu.fk_gene_name like 'lac%' ";
+dbGetQuery(con, query)  # There are 4
+
+
+# Find info on distinct genes from the positive strand that have
+# pos_left between 1000000 AND 2000000 and are part of a transcription unit
+query <- "SELECT distinct g.name, g.type, g.pos_left
+FROM genes g
+INNER JOIN transcript_units tu 
+on g.strand='+' AND g.pos_left BETWEEN 1000000 AND 2000000
+AND g.name = tu.fk_gene_name
+ORDER BY g.name"
+dbGetQuery(con, query)
+
+
+# Find the names of rRNAs that are part of some transcription unit
+query <- "SELECT DISTINCT tu.fk_gene_name 
+  FROM transcript_units tu 
+  INNER JOIN genes g on tu.fk_gene_name = g.name 
+  WHERE g.type= 'rRNA' " 
+dbGetQuery(con, query) 
+
+# More challenging query:
+# Find distinct TUs that contain genes that are part of more than 1 TU.
+query <- "SELECT DISTINCT tu.name 
+  FROM transcript_units tu 
+  INNER JOIN genes g on tu.fk_gene_name = g.name 
+  WHERE g.name in 
+    (SELECT g.name 
+    FROM transcript_units tu 
+    INNER JOIN genes g ON tu.fk_gene_name = g.name 
+    GROUP BY g.name 
+    HAVING COUNT(*) > 1)"
+dbGetQuery(con, query)
+
+# Find the number of distinct promoters in transcription units table
+query <- "SELECT COUNT(DISTINCT t.prom_name) 
+  FROM transcript_units t"
+dbGetQuery(con, query) #2847
+
+# Find the distinct promoters that are in both transcription units and promoters tables
+query <- "SELECT DISTINCT t.prom_name 
+  FROM transcript_units t 
+  INNER JOIN promoters p on t.prom_name = p.name"
+dbGetQuery(con, query)
+# Count the above distinct promoters that are in 
+#  both transcription units and promoters tables
+query <- "SELECT COUNT(DISTINCT t.prom_name) 
+  FROM transcript_units t 
+  INNER JOIN promoters p on t.prom_name = p.name"
+dbGetQuery(con, query) # 572
+# Note: above is same as implied INNER JOIN:
+query <- "SELECT COUNT(DISTINCT p.name) 
+  FROM transcript_units t, promoters p 
+  WHERE  t.prom_name = p.name" 
+dbGetQuery(con, query) # 572
+
+# More challenging query:
+# Find the number of distinct promoters in transcription units but not in the promoters table
+query <- "SELECT COUNT(prom_name) FROM 
+  (SELECT DISTINCT t.prom_name FROM transcript_units t
+  EXCEPT    -- exclude promoters in both promoters and TU tables
+   SELECT DISTINCT t.prom_name 
+    FROM transcript_units t 
+    INNER JOIN promoters p on t.prom_name = p.name)"
+dbGetQuery(con, query)  # 2275
+
+# Numbers add up:      2847  = 572  +  2275
+# number distinct promoters in TU table = 
+#   number distinct promoters in both tu and promoters tables
+# + those in tu table but not in promoters
+
+# More challenging query:
+# Number of promoters in promoters table but not in tu
+query <- "SELECT COUNT(name) FROM
+  (SELECT p.name FROM promoters p
+  EXCEPT
+  SELECT DISTINCT p.name FROM transcript_units t
+  INNER JOIN promoters p on t.prom_name = p.name)"
+dbGetQuery(con, query)  # 239
+
+# Numbers add up:  811 = 572  + 239
+# total promoters = 
+#   number distinct promoters in both tu and promoters tables 
+# + those in prom table but not in tu
+
+dbDisconnect(con)
 
 
 
