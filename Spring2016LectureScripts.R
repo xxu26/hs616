@@ -2263,6 +2263,488 @@ dbDisconnect(con)
 
 
 
+####PCA clusters
+
+
+library (ggplot2)
+#install.packages("foreign")
+library(foreign)
+library (stats)
+
+
+logisticPseudoR2s <- function(LogModel) {
+  dev <- LogModel$deviance 
+  nullDev <- LogModel$null.deviance 
+  modelN <-  length(LogModel$fitted.values)
+  R.l <-  1 -  dev / nullDev
+  R.cs <- 1- exp ( -(nullDev - dev) / modelN)
+  R.n <- R.cs / ( 1 - ( exp (-(nullDev / modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2  ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2        ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2           ", round(R.n, 3),    "\n")
+}
+
+
+diab <- read.arff("http://www.cs.usfca.edu/~pfrancislyon/uci-diabetes.arff")
+summary(diab)
+
+# 1. Number of times pregnant
+# 2. Plasma glucose concentration a 2 hours in an oral glucose tolerance test
+# 3. Diastolic blood pressure (mm Hg)
+# 4. Triceps skin fold thickness (mm)
+# 5. 2-Hour serum insulin (mu U/ml)
+# 6. Body mass index (weight in kg/(height in m)^2)
+# 7. Diabetes pedigree function
+# 8. Age (years)
+# 9. Class variable (tested negative or tested positive)
+
+# Correct zeros that should be NA
+# Note that zero pregnancies is valid, but the following are not
+diab$plas <- ifelse(diab$plas==0,NA, diab$plas)
+diab$pres <- ifelse(diab$pres==0,NA, diab$pres)
+diab$skin <- ifelse(diab$skin==0,NA, diab$skin)
+diab$insu <- ifelse(diab$insu==0,NA, diab$insu)
+diab$mass <- ifelse(diab$mass==0,NA, diab$mass)
+summary(diab)
+
+
+# density distributions of each variable with fill color determined by diabetes status
+g <- ggplot(data=diab)
+g + geom_histogram(aes(x=preg),binwidth=1, color = 5)  
+
+g + geom_histogram(aes(x=preg, fill=class),binwidth=1,position="dodge")  # position="identity" for overlaid
+g + geom_histogram(aes(x=plas, fill=class), binwidth=1,position="dodge")
+g + geom_histogram(aes(x=pres, fill=class), binwidth=1,position="dodge")
+
+g + geom_histogram(aes(x=skin, fill=class), binwidth=1,position="dodge")
+g + geom_histogram(aes(x=insu, fill=class), binwidth=1,position="dodge")
+g + geom_histogram(aes(x=mass, fill=class), binwidth=1,position="dodge")
+
+g + geom_density(aes(x=preg, fill=class), alpha=.5)    
+g + geom_density(aes(x=plas, fill=class), alpha=.5)   
+g + geom_density(aes(x=pres, fill=class), alpha=.5)    
+g + geom_density(aes(x=skin, fill=class), alpha=.5)    
+g + geom_density(aes(x=insu, fill=class), alpha=.5)   
+g + geom_density(aes(x=mass, fill=class), alpha=.5)    
+g + geom_density(aes(x=pedi, fill=class), alpha=.5)   
+g + geom_density(aes(x=age, fill=class), alpha=.5)    
+
+
+#5 Fit a regression model of diabetes as a function of the other variables.
+fit_all <- glm(class ~ ., family = binomial(), data = diab)
+summary(fit_all) #AIC: 362.02, Nagelkerke R^2 0.452
+# Null deviance: 498.10  on 391  degrees of freedom <- about half the observations ***
+# Residual deviance: 344.02  on 383  degrees of freedom
+logisticPseudoR2s(fit_all) 
+
+fit_b<- glm(class ~ preg+ plas + mass + pedi, family = binomial(), data = diab)
+summary(fit_b) #AIC: 714.72, Nagelkerke R^2 0.415
+# Null deviance: 974.75  on 751  degrees of freedom   
+# Residual deviance: 704.72  on 747  degrees of freedom  
+logisticPseudoR2s(fit_b) 
+
+#Above models are not camparable. Difference in DF due to missing data
+
+summary(diab)
+# For PCA I will use all the attributes. 
+#  I don't want to cut ~half of the rows due to NAs, so impute:
+# replace  NAs with either medians or means
+diab2 <- diab
+diab2$plas[is.na(diab2$plas)] <- mean(diab2$plas,na.rm=T)
+diab2$pres[is.na(diab2$pres)] <- mean(diab2$pres,na.rm=T)
+diab2$skin[is.na(diab2$skin)] <- mean(diab2$skin,na.rm=T)
+diab2$insu[is.na(diab2$insu)] <- mean(diab2$insu,na.rm=T)
+diab2$mass[is.na(diab2$mass)] <- mean(diab2$mass,na.rm=T)
+summary(diab2)
+
+
+# NB: with imputed data, null DF and deviances are same
+#  for all models since they use the same observations
+fit_all2 <- glm(class ~ ., family = binomial(), data = diab2)
+summary(fit_all2) #AIC: 731.3, Nagelkerke R^2 0.421 
+# Null deviance: 993.48  on 767  degrees of freedom
+# Residual deviance: 713.30  on 759  degrees of freedom
+logisticPseudoR2s(fit_all2)
+
+fit_b2<- glm(class ~ preg+ plas + mass + pedi, family = binomial(), data = diab2)
+summary(fit_b2) #AIC: 726.18, Nagelkerke R^2 0.418   ***slightly lower AICs, pseudo R^2s
+# Null deviance: 993.48  on 767  degrees of freedom  
+# Residual deviance: 716.18  on 763  degrees of freedom  
+logisticPseudoR2s(fit_b2)
+
+# test fit_all improvement over fit_b2 model  
+anova(fit_b2,fit_all2, test="Chisq") # p-value = 0.5782 
+# indicates improved fit of model fit_all over fit_b2 is insignificant
+
+#PCA
+library("psych")
+d2_attrib <- diab2[,1:8]
+
+# PCs, no rotation:
+fa_all <- principal(d2_attrib, nfactors =8, rotate = "none")
+fa_all # difficult to interpret with no rotation
+
+# Max number of PCs is the number of dimensions in the data:
+fa_all_vm <- principal(d2_attrib, nfactors =8, rotate = "varimax")
+fa_all_vm  #each has its own PC: no structure revealed
+
+# Here we use fewer PCs so we can see some structure in the data:
+# Variables that are correlated share a PC
+fa4_all_vm <- principal(d2_attrib, nfactors =4, rotate = "varimax")
+fa4_all_vm  #
+
+# Can predict with the PCs, sometimes get a better result or 
+# understanding of the data
+#NB: component scores are standard scores (mean=0, sd = 1) of the standardized input
+rotation4 <- data.frame(fa4_all_vm$score, class=diab2[,"class"])
+logisticMod <- glm(class ~  PC1 + PC2 + PC3 + PC4, data = rotation4, family = "binomial")
+summary(logisticMod) #AIC: 782.51, Nagelkerke R^2 0.345 
+logisticPseudoR2s(logisticMod)
+# Not as good a predictor, but fitted coeficients are revealing 
+# PC3 0.98343 (blood sugar),  PC4 0.41118 (pedigree)
+
+
+#install.packages("useful")
+library (useful)
+# k-means clustering:
+# for numeric data only, is susceptible to outliers
+clustKM1 <- kmeans(x=diab2[,1:8], centers=2)
+plot(clustKM1,data=diab2[,1:8])
+plot(clustKM1,data=diab2, class="class")
+
+clustKM2 <- kmeans(x=diab2[,1:8], centers=4)
+plot(clustKM2,data=diab2[,1:8])
+plot(clustKM2,data=diab2, class="class")
+
+
+# Hierarchical clustering:
+# method = "single", "complete", "average", "centroid"
+#  default is "complete"
+# Complete defines the cluster distance between two clusters 
+#   to be the max distance between their individual components. 
+# At every stage of the clustering process, 
+# the two nearest clusters are merged into a new cluster. 
+#The process is repeated until the whole data set is 
+#  agglomerated into one single cluster.
+hc1 <- hclust(dist(diab2[,1:8]))
+# plot the dendrogram
+plot(hc1)
+
+# original (not imputed) data
+hc2 <- hclust(dist(diab[,1:8]))
+plot(hc2)
+
+hc1 <- hclust(dist(diab2[,1:8]), method = "average")
+# plot the dendrogram
+plot(hc1)
+
+# original (not imputed) data
+hc2 <- hclust(dist(diab[,1:8]), method = "average")
+plot(hc2)
+
+
+
+
+
+#**********************************************************************************
+#FNDDS2011-2012
+#install.packages("tidyr")
+
+setwd("/Users/Pat/Documents/R/HS_616/assign/DB")
+
+data_dir <- "FNDDS_2011"
+
+fortification <- c(`0`="none", `1`="fortified_product", `2`="contains fortified ingredients")
+
+fndds_tables <- list(
+	AddFoodDesc = list(
+			title="Additional Food Descriptions",
+			column_types=c(
+				food_code="integer", # foreign key
+				seq_num="integer", 
+				start_date="date", 
+				end_date="date", 
+				additional_food_description="text"),
+			sep="^"
+		),
+	FNDDSNutVal = list(
+			title="FNDDS Nutrient Values",
+			column_types=c(
+				food_code="integer",
+				nutrient_code="integer",	
+				# Nutrient Descriptions table
+				start_date="date", 
+				end_date="date", 
+				nutrient_value="double"
+				),
+			sep="^"
+		),
+	FNDDSSRLinks = list(
+			title="FNDDS-SR Links",	
+			# see p34 of fndds_2011_2012_doc.pdf
+			column_types=c(
+				food_code="integer",
+				start_date="date", 
+				end_date="date", 
+				seq_num="integer",
+				sr_code="integer",
+				sr_descripton="text",
+				amount="double",
+				measure="char[3]",	
+				# lb, oz, g, mg, cup, Tsp, qt, fluid ounce, etc
+				portion_code="integer",
+				retention_code="integer",
+				flag="integer",
+				weight="double",
+				change_type_to_sr_code="char[1]",	
+				# D=data change; F=food change
+				change_type_to_weight="char[1]",
+				change_type_to_retn_code="char[1]"
+				),
+			sep="^"
+		),
+	FoodPortionDesc = list(
+			title="Food Portion Descriptions",
+			column_types=c(
+				portion_code="integer", # foreign key
+				start_date="date",
+				end_date="date",
+				portion_description="text",
+				change_type="char[1]"
+			),
+			sep="^"
+		),
+	FoodSubcodeLinks = list(
+			title="Food code-subcode links",
+			column_types=c(
+				food_code="integer",
+				subcode="integer",
+				start_date="date",
+				end_date="date"
+				),
+			sep="^"
+		),
+	FoodWeights = list(
+			title="Food Weights",
+			column_types=c(
+				food_code="integer",	# foreign key
+				subcode="integer",
+				seq_num="integer",
+				portion_code="integer",	
+				# food portion description id
+				start_date="date",
+				end_date="date",
+				portion_weight="double",	
+				# missing values = -9
+				change_type="char[1]"	
+				# D=data change, F=food change
+				),
+			sep="^"
+		),
+	MainFoodDesc = list(
+			title="Main Food Descriptions",
+			column_types=c(
+				food_code="integer", 
+				start_date="date", 
+				end_date="date", 
+				main_food_description="character", 
+				fortification_id="integer"),
+			sep="^"
+		),
+	ModDesc = list(
+			title="Modifications Descriptons",
+			column_types=c(
+				modification_code="integer",
+				start_date="date", 
+				end_date="date", 
+				modification_description="text",
+				food_code="integer"
+				
+				),
+			sep="^"
+		),
+	ModNutVal = list(
+			title="Modifications Nutrient Values",
+			column_types=c(
+				modification_code="integer",
+				nutrient_code="integer",
+				start_date="date", 
+				end_date="date", 
+				nutrient_value="double"
+				),
+			sep="^"
+		),
+	MoistNFatAdjust = list(
+			title="Moisture & Fat Adjustments",	
+			# to account for changes during cooking
+			column_types=c(
+				food_code="integer",
+				start_date="date", 
+				end_date="date", 
+				moisture_change="double",
+				fat_change="double",
+				type_of_fat="integer"	
+				# SR code or food code				
+				),
+			sep="^"
+		),
+	NutDesc = list(
+			title="Nutrient Descriptions",
+			column_types=c(
+				nutrient_code="integer",
+				nutrient_description="text",
+				tagname="text",
+				unit="text",
+				decimals="integer"	
+				# decimal places
+				),
+			sep="^"
+		),
+	SubcodeDesc = list(
+			title="Subcode Descriptions",
+			column_types=c(
+				subcode="integer",	
+				# key; 0=use default gram weights
+				start_date="date",
+				end_date="date",
+				subcode_description="text"
+				),
+			sep="^"
+		)
+)
+
+# flat file to a data frame: called by fndds2sqlite for each table
+assign_data_frame <- function(tbl_name){
+	tbl <- read.table(
+		file.path(data_dir, paste0(tbl_name, ".txt")), 
+		sep="^",
+		quote="~",
+		stringsAsFactors=FALSE)
+	# drop last (empty) column
+	tbl <- tbl[1:(length(tbl)-1)]
+	# gets names of columns from tbl_name element of fndds_tables list of list
+	names(tbl) <- names(fndds_tables[[tbl_name]][["column_types"]])
+# assigns the data frame tbl to global variable named by string contents of tbl_name
+	assign(tbl_name, tbl, envir = .GlobalEnv) 
+}
+
+# flat file to database
+fndds2sqlite <- function(data_dir, table_details, sqlite_filename){
+
+	library("RSQLite")
+  #open database named by sqlite_filename, create empty if doesn't exist
+	con <- dbConnect(SQLite(), sqlite_filename)
+
+	for (tbl_name in names(table_details)){
+		file_name <- paste0(tbl_name, ".txt") 
+		# paste0 has empty string as separator
+		assign_data_frame(tbl_name)
+		print(file_name)
+		tbl <- get(tbl_name)
+		print(tbl_name)
+	# function exits with error message next line if database already exists
+		dbWriteTable(con, tbl_name, tbl, row.names = FALSE)
+	}
+	
+	dbDisconnect(con)# seems to auto save the updated database
+}
+
+#First time run creates the database from flat files and saves to database file
+# first run also creates dataframes for each table
+#If you run whwn database already exists you get:
+# Error: Table AddFoodDesc exists in database, and both overwrite and append are FALSE 
+# and you get only one data frame, but can go on, no harm done
+fndds2sqlite("FNDDS_2011", fndds_tables, "fndds.sqlite")
+
+library(DBI)
+# Creates 3 of the data frames (useful if database already exists so data frames not created)
+for (tbl in c("FNDDSNutVal", "MainFoodDesc", "NutDesc"))
+	assign_data_frame(tbl)
+
+library(dplyr)
+library(tidyr)
+
+# Make a simplified selection of foods, store in data frame.
+# TO DO: have MainFoodDesc be a tbl sourced from SQLite.
+get_selected_foods <- function(){
+	# Pull out all "Not Further Specified" foods as a wide selection of reasonably generic items.
+  # NB: grepl returns boolean for each string in vector: TRUE if a string contains the pattern, otherwise FALSE
+	generics <- MainFoodDesc %>% 
+		filter( grepl(", NFS", main_food_description )) %>%
+		filter(!grepl("infant formula", main_food_description, ignore.case = TRUE ) )
+
+	# Raw fruits
+	# Berries are covered by "Berries, raw, NFS" and "Berries, frozen, NFS"
+	# NB: grepl can search for pattern specified by regular expressions: http://www.rexegg.com/regex-quickstart.html
+# NB: with regular expressions '^' matches empty string at beginning of line
+	#  food codes for fruits begin with 6
+	fruits <- MainFoodDesc %>% 
+		filter( grepl("^6", food_code) ) %>%
+		filter( grepl("^([^,\\(]+), raw$", main_food_description) ) %>% 
+		filter( !grepl("berries", main_food_description) )
+
+	# Raw vegetables
+	# Potatoes are covered by "White potato, NFS", "Sweet potato, NFS", etc.
+	# NB: food codes for vegetables begin with 7
+	vegetables <- MainFoodDesc %>% 
+		filter( grepl("^7", food_code) ) %>%  
+		filter(!grepl("potato", main_food_description)) %>%
+		filter( grepl(", raw$", main_food_description))
+
+	# 4="legumes, nuts, and seeds"
+	# NB: food codes for legumes, nuts, and seeds begin with 4
+	nuts_and_seeds <- MainFoodDesc %>% 
+		filter( grepl("^4", food_code) ) %>%
+		mutate( firstWord = strsplit(main_food_description, " ")[[1]][1] )
+	
+	# Selected alcoholic beverages
+	# All alcoholic beverages: grepl("^93", food_code))
+	# "Cocktail, NFS" already gives us "Cocktail"
+	# NB: food codes for alcoholic beverages begin with 93
+	alcoholic_beverages <- MainFoodDesc %>% 
+		filter( main_food_description %in% c("Beer", "Wine, table, red", "Wine, table, white", 
+			"Whiskey", "Gin", "Rum", "Vodka") )
+
+	# Collect them all into one table
+	rbind(generics, fruits, vegetables, alcoholic_beverages) %>%
+		select( food_code, main_food_description, fortification_id )  %>% 
+		filter( nchar(main_food_description) < 20 ) %>%
+	  # gsub(pattern, replacement, string_for_Pattern_matching)
+	  # replace pattern with empty string (remove pattern)
+		mutate( main_food_description = gsub("(, NFS|, raw)", "", main_food_description) ) 
+
+}
+
+foods <- get_selected_foods()	# 163 items
+
+library(sqldf)
+long_food_nutrients <- sqldf("SELECT f.main_food_description, nd.nutrient_description, nv.nutrient_value 
+	FROM foods f 
+	INNER JOIN FNDDSNutVal nv ON f.food_code = nv.food_code 
+	INNER JOIN NutDesc nd ON nv.nutrient_code = nd.nutrient_code") 
+
+# tidyr spread: Spread a key-value pair across multiple columns.
+# spread(data, key, value, fill = NA, convert = FALSE, drop = TRUE)
+# data is a data frame.
+# key is name of the column whose values will be used as column headings.
+# value is name of the column whose values will populate the cells.
+# fill If set, missing values will be replaced with this value.
+# http://www.rdocumentation.org/packages/tidyr/functions/spread
+nutrient_food_df <- spread(long_food_nutrients, main_food_description, nutrient_value, fill=0)
+
+#remove 1st column, convert to matrix, transpose
+food_nutrient_mat <- t(as.matrix(nutrient_food_df[-1])) 
+colnames(food_nutrient_mat) <- nutrient_food_df$nutrient_description
+
+save(food_nutrient_mat, file="food_nutrient_mat.Rdata")
+# saveRDS is like save, but with saveRDS, the saved object can be loaded into a named object
+#   within R that is different from the name it had when originally serialized.
+saveRDS(foods, file="foods.rds")
+
+
+
+
 
 
 
