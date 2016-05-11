@@ -2746,36 +2746,73 @@ saveRDS(foods, file="foods.rds")
 #Week 15-16
 # Assignment 6 involved data simulation
 # Below is information on simulating a boolean variable 
-#  taken Tom DeNatale's data simulation project:
-#  https://github.com/tdenatale/hs616/blob/master/Final_project.Rmd
+# and simulating height and weight vectors
 
+
+# Simulate height and weight columns for N men from 1960 and N from 2010 using
+#  height and weight means of a large number of American men from:
+# National Center for Health Statistics  http://www.cdc.gov/nchs/fastats/body-measurements.htm 
+# Based on code from Bob Horton.
+# Note that each person's weight is based on their standardized height
+#  as well as on the appropriate weight mean and some random noise
+set.seed(123)
+N = 25
+M_HEIGHT_2010_MEAN <- 1.76 # meters
+M_HEIGHT_1960_MEAN <- 1.73 # meters 
+HEIGHT_SD <- 0.15
+M_WEIGHT_2010_MEAN <- 88.7 # kg
+M_WEIGHT_1960_MEAN <- 75.4 # kg
+WEIGHT_SD <- 20
+
+sampH2010_1 <- rnorm(N, mean=M_HEIGHT_2010_MEAN, sd=HEIGHT_SD)
+sampW2010_1 <- 1.2 * ( sampH2010_1 - M_HEIGHT_2010_MEAN) + M_WEIGHT_2010_MEAN + rnorm(N, sd=WEIGHT_SD)
+sampH1960_1<- rnorm(N, mean=M_HEIGHT_1960_MEAN, sd=HEIGHT_SD)
+sampW1960_1 <- 1.2 * ( sampH1960_1 - M_HEIGHT_1960_MEAN) + M_WEIGHT_1960_MEAN + rnorm(N, sd=WEIGHT_SD)
+
+sampH2010_2 <- rnorm(N, mean=M_HEIGHT_2010_MEAN, sd=HEIGHT_SD-.05)
+sampW2010_2 <- 1.2 * ( sampH2010_2 - M_HEIGHT_2010_MEAN) + M_WEIGHT_2010_MEAN + rnorm(N, sd=WEIGHT_SD-7)
+sampH1960_2<- rnorm(N, mean=M_HEIGHT_1960_MEAN, sd=HEIGHT_SD-.05)
+sampW1960_2 <- 1.2 * ( sampH1960_2 - M_HEIGHT_1960_MEAN) + M_WEIGHT_1960_MEAN + rnorm(N, sd=WEIGHT_SD-7)
+
+
+
+# Simulation of a column for a boolean variables (ex: cancer)
+#   that is related to age so must utilize the age column.
+# Taken from Tom DeNatale's data simulation project:
+#  https://github.com/tdenatale/hs616/blob/master/Final_project.Rmd
 logistic <- function(t) 1 / (1 + exp(-t))
 
+# First some plots to understand the logistic function
 vec <- .1* (1:200) - 10
 logistic(vec)
 plot(vec)
 plot(logistic(vec))
-plot(logistic(vec))
 
-
+# Observe some values of the logistic function
+# Note that most of the values along the domain
+#  of this function are either 0 or 1
 logistic(-10)
-logistic(0.01)
+logistic(0)
 logistic(1)
 logistic(10)
 
+# The seed is for reproducibilty of your results:
+# Re-run the set.seed along with the rest of the code
+#  each time you adjust the coeficients till you get what you want
 set.seed(123)
 N<- 100 # out of 100 roll of the dice
 age1 <- 20
 age2 <- 50
 age3 <- 80
-# .08 reduces the value more than .19
+
+# Coeficient .08 reduces the value more than .19 does
 # so fewer of the uniform random numbers will be below the value
-# runif(N) is the default: numbers between 0 and 1
+# runif(N) has default min and max, generates between 0 and 1
 DIAB1 <- runif(N)< .08*logistic((age1-50)/10) 
 DIAB2 <- runif(N)< .08*logistic((age2-50)/10) #logistic(0)= .5
 DIAB3 <- runif(N)< .08*logistic((age3-50)/10)
 CANC1 <- runif(N)< .19*logistic((age1-40)/10) # higher values since subtracting less
-CANC2 <- runif(N)< .19*logistic((age2-40)/10) # not reduced by as much
+CANC2 <- runif(N)< .19*logistic((age2-40)/10) # so not reduced by as much
 CANC3 <- runif(N)< .19*logistic((age3-40)/10) # so more runif fall below
                             # here there are more people with cancer than diabetes
 
